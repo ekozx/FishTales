@@ -7,4 +7,6 @@ function init() {
 	circle.y = 100;
 	stage.addChild(circle);
 	stage.update();
+	
+	var neuron = new Neuron(4, 1);
 }
