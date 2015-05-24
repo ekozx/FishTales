@@ -37,3 +37,18 @@
 		 resultVals.push(this.layers[this.layers.length - 1][index].outputVal);
 	 }
  };
+ /**
+  * @param inputVals
+  * 	An array of floats 
+  */
+  Net.prototype.feedForward = function(inputVals) {
+	  for (var i = 0; i < inputVals.length; i++) {
+		  this.layers[0][i].outputVal = inputVals[i];
+	  }
+	  for (var layerNum = 0; layerNum < this.layers.length; layerNum++) {
+		  var prevLayer = this.layers[layerNum - 1];
+		  for (var j = 0; j < array.length; j++) {
+			  this.layers[layerNum][j].feedFoward(prevLayer);
+		  }
+	  }
+  };
