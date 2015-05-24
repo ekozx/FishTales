@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 	var container;
 	var container_rocks;
 	var w;
@@ -95,29 +94,9 @@
 			
 			circle.velX = px;
 			circle.velY = py;
-			
-			
-			
-			
+					
 		}
 		
 		stage.update();
 	}
 	
-	
-	
-	
-=======
-function init() {
-	console.log("Starting Game");
-	var stage = new createjs.Stage("demoCanvas");
-	var circle = new createjs.Shape();
-	circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 50);
-	circle.x = 100;
-	circle.y = 100;
-	stage.addChild(circle);
-	stage.update();
-	
-	var neuron = new Neuron(4, 1);
-}
->>>>>>> 1de34ae308d878c95eeeb5a34e68705f65d94423
