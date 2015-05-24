@@ -46,7 +46,7 @@ function buildConnection(numOutputs) {
   * 	Array of Neurons from previous layer.
   */
  Neuron.prototype.feedFoward = function(prevLayer) {
-	  sum = 0.0;
+	  var sum = 0.0;
 	  for (var index = 0; index < prevLayer.length; index++) {
 		  sum += prevLayer[index].outputVal * 
 		  		prevLayer[index].connectionWeights[this.index];
