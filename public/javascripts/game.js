@@ -17,13 +17,13 @@
 		stage.addChild(container);
 		stage.addChild(container_rocks);
 
-		for (var i = 0; i < 1000; i++) {
+		for (var i = 0; i < 50; i++) {
 			var circle = new createjs.Shape();
 			circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 10);
 			circle.x = Math.random() * w;
 			circle.y = Math.random() * h;
-			circle.velY = (Math.random() * 20) - 10;
-			circle.velX = (Math.random() * 20) - 10;
+			circle.velY = (Math.random() * 2.0) - 1.0;
+			circle.velX = (Math.random() * 2.0) - 1.0;
 
 			container.addChild(circle);
 		}
@@ -36,8 +36,8 @@
 			circle.y = Math.random() * h;
 			container_rocks.addChild(circle);
 		}
-
-	createjs.Ticker.addEventListener("tick", handleTick);
+		createjs.Ticker.setFPS(6000);
+		createjs.Ticker.addEventListener("tick", handleTick);
 
 		
 	}
@@ -53,12 +53,16 @@
 			
 			circle.y += circle.velY;
 			if(circle.y<0 || circle.y>h){
-				circle.velY = -circle.velY;
+				circle.velY = -circle.velX;
+				continue;
 			}
 			circle.x += circle.velX;
 			if(circle.x<0 || circle.x>w){
 				circle.velX = -circle.velX;
+				continue;
 			}
+			//caluculate net inputs
+			//var inputs = [0,0,0,0];
 			
 			for(var j = 0;j < r; j++){
 				var rock = container_rocks.getChildAt(j);
@@ -67,12 +71,38 @@
 				var distance = Math.sqrt(xDist*xDist + yDist*yDist);
 				
 				if (distance < 10 + 50) {
-    				circle.velY = 0;
-					circle.velX = 0;
+					container.removeChildAt(i);
+					continue;
 				}
+				
+				
 			}
+			
+			//feed int net for the correct fish
+			//fish.net.feed(inputs)
+		
+			//get turn output	
+			//vector math to turn each fish, currently random
+			
+			var turn = (Math.random() * 20) - 10;
+			var rad = (turn*Math.PI)/180;
+			var cs = Math.cos(rad);
+			var sn = Math.sin(rad);
 
+			var px = circle.velX * cs - circle.velY * sn; 
+			var py = circle.velX * sn + circle.velY * cs;
+			
+			circle.velX = px;
+			circle.velY = py;
+			
+			
+			
+			
 		}
 		
 		stage.update();
 	}
+	
+	
+	
+	
