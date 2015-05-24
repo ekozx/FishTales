@@ -19,15 +19,6 @@ var Neuron = function(numOutputs, index) {
 	this.gradient = 0.0;
 };
 /**
- * @param val
- * 		The value to set this.outVal.
- */
- function setOutputVal(val) {
-	 
- }
- 
-
-/**
  * @param numOutputs
  * 		The number of outputs 
  * @returns
