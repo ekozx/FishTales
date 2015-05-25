@@ -1,5 +1,7 @@
 	var container;
 	var container_rocks;
+	//length of fish sensor
+	var sensor_length = 10;
 	var w;
 	var h;
 
@@ -62,7 +64,8 @@
 				continue;
 			}
 			//caluculate net inputs
-			//var inputs = [0,0,0,0];
+			var inputs = [-1,-1,-1,-1];
+			
 			
 			for(var j = 0;j < r; j++){
 				var rock = container_rocks.getChildAt(j);
