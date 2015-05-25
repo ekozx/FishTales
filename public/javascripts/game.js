@@ -16,6 +16,10 @@
 		container_rocks = new createjs.Container();
 		stage.addChild(container);
 		stage.addChild(container_rocks);
+		
+		var net = new Net([1, 1, 1, 1]);
+		var results = net.getResults();
+		console.log(results);
 
 		for (var i = 0; i < 50; i++) {
 			var circle = new createjs.Shape();
