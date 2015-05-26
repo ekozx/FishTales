@@ -24,7 +24,7 @@ var Neuron = function(numOutputs, index) {
  * @returns
  * 		Array of integers for the weights of each connection.
  */
-function buildConnection(numOutputs) {
+function buildConnections(numOutputs) {
 	var connections = [];
 	for (var index = 0; index < numOutputs; index++) {
 		connections.push(1.0);

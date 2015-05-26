@@ -21,8 +21,8 @@
 	 var layers = [];
 	 for (var index = 0; index < topology.length; index++) {
 		 var layer = [];
+		 layers.push(layer);
 		 var numOutputs = (index == topology.length - 1) ? 0 : topology[index  + 1];
-		 console.log(numOutputs);
 		 for (var neuronNum = 0; neuronNum < topology.length; neuronNum++) {
 			 layers[layers.length - 1].push(new Neuron(numOutputs, neuronNum));
 		 }
@@ -42,6 +42,7 @@
 	 for (var index = 0; index < this.layers[this.layers.length -1].length; index++) {
 		 resultVals.push(this.layers[this.layers.length - 1][index].outputVal);
 	 }
+	 return resultVals;
  };
  /**
   * @param inputVals
