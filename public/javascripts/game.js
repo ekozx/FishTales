@@ -28,10 +28,19 @@
 			circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 10);
 			circle.x = Math.random() * w;
 			circle.y = Math.random() * h;
-			circle.velY = (Math.random() * 2.0) - 1.0;
-			circle.velX = (Math.random() * 2.0) - 1.0;
+			circle.velY = 1.0;
+			circle.velX = 0.0;
 
-			container.addChild(circle);
+			var turn = (Math.random() * 360);
+			var rad = (turn*Math.PI)/180;
+			var cs = Math.cos(rad);
+			var sn = Math.sin(rad);
+
+			var px = circle.velX * cs - circle.velY * sn; 
+			var py = circle.velX * sn + circle.velY * cs;
+			
+			circle.velX = px;
+			circle.velY = py;
 		}
 		
 		
