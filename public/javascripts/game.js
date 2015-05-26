@@ -30,7 +30,7 @@
 			circle.x = Math.random() * w;
 			circle.y = Math.random() * h;
 			circle.velY = 1.0;
-			circle.velX = 0.0;
+			circle.velX = 1.0;
 
 			var turn = (Math.random() * 360);
 			var rad = (turn*Math.PI)/180;
@@ -42,6 +42,8 @@
 			
 			circle.velX = px;
 			circle.velY = py;
+			
+			container.addChild(circle);
 		}
 		
 		
