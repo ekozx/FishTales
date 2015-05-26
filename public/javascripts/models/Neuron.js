@@ -27,7 +27,7 @@ var Neuron = function(numOutputs, index) {
 function buildConnections(numOutputs) {
 	var connections = [];
 	for (var index = 0; index < numOutputs; index++) {
-		connections.push(1.0);
+		connections.push((Math.random() * 2) - 1);
 	}
 }
 /**

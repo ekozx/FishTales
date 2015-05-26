@@ -1,3 +1,4 @@
+/* global z */
 	var container;
 	var container_rocks;
 	var w;
@@ -19,7 +20,7 @@
 		
 		var net = new Net([1, 1, 1, 1]);
 		var results = net.getResults();
-		console.log(results);
+//		console.log(results);
 
 		for (var i = 0; i < 50; i++) {
 			var circle = new createjs.Shape();
@@ -89,7 +90,7 @@
 			//vector math to turn each fish, currently random
 			
 			var turn = (Math.random() * 20) - 10;
-			var rad = (turn*Math.PI)/180;
+			var rad = (turn*pi())/180;
 			var cs = Math.cos(rad);
 			var sn = Math.sin(rad);
 
@@ -102,5 +103,27 @@
 		}
 		
 		stage.update();
+	}
+	/**
+	 * @param z
+	 * 		The distance from the fish to the center of the rock
+	 * @param r
+	 * 		Radius of the rock.
+	 * @param t
+	 * 		Angle (theta) between z and l
+	 * @returns
+	 * 		Distance between fish and rock, say l. 
+	 */
+	function distanceFromRock(z, r, t) {
+		return  ( r/sin(t) ) * sin ( pi()-t-( pi()-asin(( z * sin(t))/r) ));
+	}
+	function sin(x) {
+		return Math.sin(x);
+	}
+	function asin(x) {
+		return Math.asin(x);
+	}
+	function pi() {
+		return Math.PI;
 	}
 	
