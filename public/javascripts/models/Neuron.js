@@ -5,14 +5,14 @@
  * 		in the next layer.
  * @param index
  * @param connections
- * 		Srray of integers for the weights of the edges
+ * 		Array of integers for the weights of the edges
  */
 var Neuron = function(numOutputs, index) {
 	this.eta = 0.39; // Overall net learning rate
 	this.alpha = 0.1; //momentum, multiplied by last delta weight
 	this.numOutputs = numOutputs;
 	this.index = index;
-	this.connectionWeights  = buildConnections(numOutputs);
+	this.connectionWeights = buildConnections(numOutputs);
 	
 	this.outputVal = 0.0;
 	this.inputVal = 0.0;
