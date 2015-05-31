@@ -70,9 +70,27 @@
 		  }
 	  }
   };
- /**
-  * A small helper function for less lengthy code
-  */
-function lastIndex(layers) {
-   return layers.length - 1;
-}
+  /**
+   *  Returns the chromosome from a single net. The chromosome is a list of 
+   *  all of the outputs of each neuron in the network (edges in the graph).
+   *  @returns
+   * 	an array of floats
+   */
+   Net.prototype.getChromosome = function() {
+   
+   };
+   /**
+	* Sets the list of all neuron connection weights from the graph.
+	* @param weights
+	* 	An array of floats, containing weights in order from first in the top
+	* 	layer to last.
+    */
+	Net.prototype.setChromosome = function() {
+	
+	};
+	/**
+	 * a small helper function for less lengthy code
+	 */
+	 function lastIndex(layers) {
+		 return layers.length - 1;
+	 }
