@@ -20,7 +20,7 @@
 		stage.addChild(container);
 		stage.addChild(container_rocks);
 		
-		var net = new Net([1, 1, 1, 1]);
+		var net = new Net([4, 3, 2]);
 		var results = net.getResults();
 //		console.log(results);
 

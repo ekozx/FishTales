@@ -23,14 +23,13 @@
 		 var layer = [];
 		 layers.push(layer);
 		 var numOutputs = (index == topology.length - 1) ? 0 : topology[index  + 1];
-		 for (var neuronNum = 0; neuronNum < topology.length; neuronNum++) {
-			 layers[biasIndex(layers)].push(new Neuron(numOutputs, neuronNum));
+		 for (var neuronNum = 0; neuronNum <= topology[index]; neuronNum++) {
+			 layers[lastIndex(layers)].push(new Neuron(numOutputs, neuronNum));
 		 }
-		 layers.push(layer);
 		 //The bias neuron
-		 layers[biasIndex(layers)][layers[biasIndex(layers)].length - 1] = 1.0;
+		 layers[lastIndex(layers)][layers[lastIndex(layers)].length - 1] = 1.0;
 	 }
-//	 console.log(layers);
+	 console.log(layers);
 	 return layers;
  }
  /**
@@ -40,8 +39,10 @@
  Net.prototype.getResults = function() {
 	 var resultVals = [];
 	 for (var index = 0; index < this.layers[this.layers.length -1].length; index++) {
-		 resultVals.push(this.layers[biasIndex(this.layers)][index].outputVal);
+//		 console.log(this.layers[lastIndex(this.layers)][index].outputVal);
+		 resultVals.push(this.layers[lastIndex(this.layers)][index].outputVal);
 	 }
+//	 console.log(resultVals);
 	 return resultVals;
  };
  /**
@@ -62,6 +63,6 @@
   /**
    * @returns 
    */
-   function biasIndex(layers) {
+   function lastIndex(layers) {
 	   return layers.length - 1;
    }

@@ -29,6 +29,7 @@ function buildConnections(numOutputs) {
 	for (var index = 0; index < numOutputs; index++) {
 		connections.push((Math.random() * 2) - 1);
 	}
+	return connections;
 }
 /**
  * @param x
