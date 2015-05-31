@@ -53,11 +53,26 @@
 		container_rocks = new createjs.Container();
 		stage.addChild(container_rocks);
 
-		for (var i = 0; i < 10; i++) {
+		for (var i = 0; i < 15; i++) {
 			var circle = new createjs.Shape();
 			circle.graphics.beginFill("red").drawCircle(0, 0, 50);
 			circle.x = Math.random() * w;
 			circle.y = Math.random() * h;
+			
+			circle.velY = 1.0;
+			circle.velX = 0;
+
+			var turn = (Math.random() * 360);
+			var rad = (turn*Math.PI)/180;
+			var cs = Math.cos(rad);
+			var sn = Math.sin(rad);
+
+			var px = circle.velX * cs - circle.velY * sn;
+			var py = circle.velX * sn + circle.velY * cs;
+
+			circle.velX = px;
+			circle.velY = py;
+			
 			container_rocks.addChild(circle);
 		}
 		//createjs.Ticker.setFPS(30000);
@@ -68,7 +83,7 @@
 
 	function handleTick(event) {
 		var r = container_rocks.getNumChildren();
-
+		console.log("FISH LEFT: " + pop.length);
 		for (var i = 0; i < pop.length; i++) {
 			var circle = pop[i].circle;
 
@@ -85,7 +100,7 @@
 
 				circle.velX = px;
 				circle.velY = py;
-				continue;
+				//continue;
 			}
 			circle.x += circle.velX;
 			if(circle.x<0 || circle.x>w){
@@ -99,7 +114,7 @@
 
 				circle.velX = px;
 				circle.velY = py;
-				continue;
+				//continue;
 			}
 
 			/*
@@ -144,7 +159,7 @@
 
 
 
-				var rad = (10*pi())/180;
+				var rad = (20*pi())/180;
 				var cs = Math.cos(rad);
 				var sn = Math.sin(rad);
 
@@ -156,7 +171,7 @@
 				updateInput(inputs,1, dot,distance);
 
 
-				rad = (350*pi())/180;
+				rad = (340*pi())/180;
 				cs = Math.cos(rad);
 				sn = Math.sin(rad);
 
@@ -197,6 +212,23 @@
 			circle.velX = px;
 			circle.velY = py;
 
+		}
+		
+		
+		for(var j = 0; j < r; j++){
+			var rock = container_rocks.getChildAt(j);
+			rock.y += rock.velY;
+			if(rock.y<0 || rock.y>h){
+
+				rock.velY = -rock.velY;
+				continue;
+			}
+			rock.x += rock.velX;
+			
+			if(rock.x<0 || rock.x>w){
+				rock.velX = -rock.velX;
+				continue;
+			}
 		}
 
 		stage.update();
