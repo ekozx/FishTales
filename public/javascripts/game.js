@@ -66,7 +66,6 @@
 	function handleTick(event) {
 		var r = container_rocks.getNumChildren();
 
-
 		for (var i = 0; i < container.getNumChildren(); i++) {
 			var circle = container.getChildAt(i);
 
@@ -163,7 +162,7 @@
 				updateInput(inputs,2, dot,distance);
 
 			}
-			
+			console.log(inputs);
 			
 			
 			//normalize inputs what range to we actually care about
