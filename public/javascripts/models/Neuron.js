@@ -27,8 +27,10 @@ var Neuron = function(numOutputs, index) {
 function buildConnections(numOutputs) {
 	var connections = [];
 	for (var index = 0; index < numOutputs; index++) {
-		connections.push((Math.random() * 2) - 1);
+//		connections.push((Math.random() * 2) - 1);
+		connections.push(.1);
 	}
+	return connections;
 }
 /**
  * @param x
@@ -45,7 +47,7 @@ function buildConnections(numOutputs) {
   * @param prevLayer
   * 	Array of Neurons from previous layer.
   */
- Neuron.prototype.feedFoward = function(prevLayer) {
+ Neuron.prototype.feedForward = function(prevLayer) {
 	  var sum = 0.0;
 	  for (var index = 0; index < prevLayer.length; index++) {
 		  sum += prevLayer[index].outputVal * 
