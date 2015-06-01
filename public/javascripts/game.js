@@ -16,11 +16,6 @@
 		w = canvas.width;
 		h = canvas.height;
 
-
-
-
-
-
 //		var net = new Net([4, 1000, 2]);
 //		net.feedForward([.5,.4,.3,.2]);
 //		var results = net.getResults();
@@ -84,7 +79,7 @@
 
 	function handleTick(event) {
 		var r = container_rocks.getNumChildren();
-		console.log("FISH LEFT: " + pop.length);
+//		console.log("FISH LEFT: " + pop.length);
 		for (var i = 0; i < pop.length; i++) {
 			var circle = pop[i].circle;
 

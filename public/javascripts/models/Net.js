@@ -51,7 +51,7 @@
   * then uses those initial values to populate outputvals the rest of 
   * the neurons in the network.
   * @param inputVals
-  * 	An array of floats
+  * 	An array of floats, x, s.t. 0 <= x < 1
   */
   Net.prototype.feedForward = function(inputVals) {
 	  if(inputVals.length !== this.layers[0].length-1) {
@@ -93,12 +93,16 @@
 	* 	An array of floats, containing weights in order from first in the top
 	* 	layer to last.
     */
-	Net.prototype.setChromosome = function(weights, i) {
-		for (var i = 0; i < this.layers.length; i++) {
-			for (var j = 0; j < this.layers[i].length; j++) {
-				
-			}	
-		}
+	Net.prototype.setChromosome = function(weights) {
+		weights.reverse(); // reverse the array because pop takes the last element
+		this.layers.forEach(function(neurons, i) {
+			neurons.forEach(function(neuron, j) {
+				neuron.connectionWeights = []; // reset the neurons edges
+				for (var k = 0; k < neuron.numOutputs; k++) {
+					neuron.connectionWeights.push(weights.pop()); //add in the new edge
+				}
+			});
+		});
 	};
 	/**
 	 * a small helper function for less lengthy code
