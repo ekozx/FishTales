@@ -6,7 +6,7 @@
 	var w;
 	var h;
 
-
+	var pop = [];
 
 	function init() {
 		// create a new stage and point it at our canvas:
@@ -18,25 +18,48 @@
 
 
 
-		container = new createjs.Container();
+
+
+
+//		var net = new Net([4, 1000, 2]);
+//		net.feedForward([.5,.4,.3,.2]);
+//		var results = net.getResults();
+//		console.log(results);
+
+		for (var i = 0; i < 5000; i++) {
+			var fish = new Fish();
+			fish.circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 10);
+			fish.circle.x = Math.random() * w;
+			fish.circle.y = Math.random() * h;
+			fish.circle.velY = 1.0;
+			fish.circle.velX = 0;
+
+			var turn = (Math.random() * 360);
+			var rad = (turn*Math.PI)/180;
+			var cs = Math.cos(rad);
+			var sn = Math.sin(rad);
+
+			var px = fish.circle.velX * cs - fish.circle.velY * sn;
+			var py = fish.circle.velX * sn + fish.circle.velY * cs;
+
+			fish.circle.velX = px;
+			fish.circle.velY = py;
+
+			pop.push(fish);
+			stage.addChild(fish.circle);
+		}
+	
+	
 		container_rocks = new createjs.Container();
-		stage.addChild(container);
 		stage.addChild(container_rocks);
 
-		var net = new Net([3, 4, 2]);
-		net.feedForward([.5,.4,.3,.2]);
-		var results = net.getResults();
-		console.log(results);
-		var chromosome = net.getChromosome();
-		console.log(chromosome);
-		var net2 = new Net([3, 4, 2]);
-		net2.setChromosome(chromosome);
 
-		for (var i = 0; i < 1; i++) {
+		for (var i = 0; i < 15; i++) {
 			var circle = new createjs.Shape();
-			circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 10);
+			circle.graphics.beginFill("red").drawCircle(0, 0, 50);
 			circle.x = Math.random() * w;
 			circle.y = Math.random() * h;
+			
 			circle.velY = 1.0;
 			circle.velX = 0;
 
@@ -50,16 +73,7 @@
 
 			circle.velX = px;
 			circle.velY = py;
-
-			container.addChild(circle);
-		}
-
-
-		for (var i = 0; i < 10; i++) {
-			var circle = new createjs.Shape();
-			circle.graphics.beginFill("red").drawCircle(0, 0, 50);
-			circle.x = Math.random() * w;
-			circle.y = Math.random() * h;
+			
 			container_rocks.addChild(circle);
 		}
 		//createjs.Ticker.setFPS(30000);
@@ -70,10 +84,9 @@
 
 	function handleTick(event) {
 		var r = container_rocks.getNumChildren();
-
-
-		for (var i = 0; i < container.getNumChildren(); i++) {
-			var circle = container.getChildAt(i);
+		console.log("FISH LEFT: " + pop.length);
+		for (var i = 0; i < pop.length; i++) {
+			var circle = pop[i].circle;
 
 
 			circle.y += circle.velY;
@@ -88,7 +101,7 @@
 
 				circle.velX = px;
 				circle.velY = py;
-				continue;
+				//continue;
 			}
 			circle.x += circle.velX;
 			if(circle.x<0 || circle.x>w){
@@ -102,7 +115,7 @@
 
 				circle.velX = px;
 				circle.velY = py;
-				continue;
+				//continue;
 			}
 
 			/*
@@ -111,7 +124,7 @@
 				A lot of optimization can be done here
 			*/
 			var inputs = [Math.sqrt((w*w)+(h*h)),Math.sqrt((w*w)+(h*h)),Math.sqrt((w*w)+(h*h))];
-
+			var flag = 0;
 
 			for(var j = 0; j < r; j++){
 				var rock = container_rocks.getChildAt(j);
@@ -121,8 +134,11 @@
 
 				if (distance < 10 + 50) {
 					//fish i had a collision with rock j remove it from the screen and continue
-					container.removeChildAt(i);
-					continue;
+					stage.removeChildAt(i);
+					
+					pop.splice(i,1);
+					flag = 1;
+					break;
 				}
 				// vector(rx,ry) is the vector from the center of the fish to the center of the rock
 				var rx = xDist/distance;
@@ -144,7 +160,7 @@
 
 
 
-				var rad = (10*pi())/180;
+				var rad = (20*pi())/180;
 				var cs = Math.cos(rad);
 				var sn = Math.sin(rad);
 
@@ -156,7 +172,7 @@
 				updateInput(inputs,1, dot,distance);
 
 
-				rad = (350*pi())/180;
+				rad = (340*pi())/180;
 				cs = Math.cos(rad);
 				sn = Math.sin(rad);
 
@@ -168,21 +184,25 @@
 				updateInput(inputs,2, dot,distance);
 
 			}
+			if(flag==1){
+				continue;
+			}
 
-
+			//console.log(inputs);
 
 			//normalize inputs what range to we actually care about
 			//how far can the fish see infinite ???
 
 			var netInputs = [inputs[0]/Math.sqrt((w*w)+(h*h)),inputs[1]/Math.sqrt((w*w)+(h*h)),inputs[2]/Math.sqrt((w*w)+(h*h))];
-
+			
+			pop[i].net.feedForward(netInputs);
 			//feed into net for the correct fish
 			//fish.net.feed(inputs)
 
 			//get turn output
 			//vector math to turn each fish, currently random
-
-			var turn = (Math.random() * 20) - 10;
+			var out = pop[i].net.getResults()[0];
+			var turn = out*5;
 			var rad = (turn*pi())/180;
 			var cs = Math.cos(rad);
 			var sn = Math.sin(rad);
@@ -193,6 +213,23 @@
 			circle.velX = px;
 			circle.velY = py;
 
+		}
+		
+		
+		for(var j = 0; j < r; j++){
+			var rock = container_rocks.getChildAt(j);
+			rock.y += rock.velY;
+			if(rock.y<0 || rock.y>h){
+
+				rock.velY = -rock.velY;
+				continue;
+			}
+			rock.x += rock.velX;
+			
+			if(rock.x<0 || rock.x>w){
+				rock.velX = -rock.velX;
+				continue;
+			}
 		}
 
 		stage.update();

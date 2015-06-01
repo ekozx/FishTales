@@ -54,7 +54,7 @@
   * 	An array of floats
   */
   Net.prototype.feedForward = function(inputVals) {
-	  if(inputVals.length !== this.layers[0].length) {
+	  if(inputVals.length !== this.layers[0].length-1) {
 		  console.log("Incorrect number of inputs for the first network layer!");
 		  console.log("Expect incorrect output!");
 	  }
