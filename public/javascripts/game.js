@@ -21,7 +21,6 @@
 
 //		var net = new Net([8,2]);
 //		net.feedForward([.5,.4,.3,.2,.5,.4,.3,.2]);
-
 //		var net = new Net([4, 1000, 2]);
 //		net.feedForward([.5,.4,.3,.2]);
 
