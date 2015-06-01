@@ -77,7 +77,15 @@
    * 	an array of floats
    */
    Net.prototype.getChromosome = function() {
-   
+	   var chromosome = [];
+	   this.layers.forEach(function (neurons, i) {
+		   neurons.forEach(function (neuron, j) {
+			  neuron.connectionWeights.forEach(function (connection, k) {
+				 chromosome.push(connection);  
+			  }); 
+		   });
+	   });  
+	   return chromosome;
    };
    /**
 	* Sets the list of all neuron connection weights from the graph.
@@ -85,8 +93,12 @@
 	* 	An array of floats, containing weights in order from first in the top
 	* 	layer to last.
     */
-	Net.prototype.setChromosome = function() {
-	
+	Net.prototype.setChromosome = function(weights, i) {
+		for (var i = 0; i < this.layers.length; i++) {
+			for (var j = 0; j < this.layers[i].length; j++) {
+				
+			}	
+		}
 	};
 	/**
 	 * a small helper function for less lengthy code

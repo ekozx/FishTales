@@ -53,7 +53,8 @@
 		container_rocks = new createjs.Container();
 		stage.addChild(container_rocks);
 
-		for (var i = 0; i < 20; i++) {
+
+		for (var i = 0; i < 15; i++) {
 			var circle = new createjs.Shape();
 			circle.graphics.beginFill("red").drawCircle(0, 0, 50);
 			circle.x = Math.random() * w;
