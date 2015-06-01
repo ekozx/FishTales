@@ -21,19 +21,44 @@ Fish.prototype.makeChild = function (maleParent) {
 	var fatherSide = fatherChromosome.splice(splitPoint, fatherChromosome.length); 
 	var joinedChromosome = motherSide.concat(fatherSide);
 	
-	if(joinedChromosome.length !== fatherChromosome.length) {
-		console.log("Joined chromosome has an incorrect size!");
-	}
-	
+//	if(joinedChromosome.length !== fatherChromosome.length) {
+//		console.log("Joined chromosome has an incorrect size!");
+//		console.log("FATHER LEN: "+ fatherChromosome.length);
+//		console.log("MOTHER LEN: "+ motherChromosome.length);
+//		console.log("BABY   LEN: "+ joinedChromosome.length);
+//	}
+//	
 	for (var i = 0; i < joinedChromosome.length; i++) {
 		if(Math.random() < getMutationRate()) {
 			joinedChromosome[i] = Math.random() * 2 - 1;
 		}
 	}
 	
-	var child = new Fish();
-	child.net.setChromosome(joinedChromosome);
-	return child;
+	var fish = new Fish();
+	
+	fish.circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 10);
+			
+	fish.circle.x = Math.random() * w;
+	fish.circle.y = Math.random() * h;
+			
+			
+	fish.circle.velY = 1.0;
+	fish.circle.velX = 0;
+
+	var turn = (Math.random() * 360);
+	var rad = (turn*Math.PI)/180;
+	var cs = Math.cos(rad);
+	var sn = Math.sin(rad);
+
+	var px = fish.circle.velX * cs - fish.circle.velY * sn;
+	var py = fish.circle.velX * sn + fish.circle.velY * cs;
+
+	fish.circle.velX = px;
+	fish.circle.velY = py;
+	
+	
+	fish.net.setChromosome(joinedChromosome);
+	return fish;
 };
 /**
  * The variance for the split.
