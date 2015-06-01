@@ -5,6 +5,8 @@
 	var sensor_length = 10;
 	var w;
 	var h;
+	
+	
 
 	var pop = [];
 
@@ -16,21 +18,19 @@
 		w = canvas.width;
 		h = canvas.height;
 
-
-
-
-
-
-//		var net = new Net([4, 1000, 2]);
-//		net.feedForward([.5,.4,.3,.2]);
+//		var net = new Net([8,2]);
+//		net.feedForward([.5,.4,.3,.2,.5,.4,.3,.2]);
 //		var results = net.getResults();
 //		console.log(results);
 
-		for (var i = 0; i < 5000; i++) {
+		for (var i = 0; i < 1000; i++) {
 			var fish = new Fish();
 			fish.circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 10);
+			
 			fish.circle.x = Math.random() * w;
 			fish.circle.y = Math.random() * h;
+			
+			
 			fish.circle.velY = 1.0;
 			fish.circle.velX = 0;
 
@@ -53,13 +53,15 @@
 		container_rocks = new createjs.Container();
 		stage.addChild(container_rocks);
 
-		for (var i = 0; i < 15; i++) {
+		for (var i = 0; i < 20; i++) {
 			var circle = new createjs.Shape();
 			circle.graphics.beginFill("red").drawCircle(0, 0, 50);
 			circle.x = Math.random() * w;
 			circle.y = Math.random() * h;
 			
-			circle.velY = 1.0;
+			
+			
+			circle.velY = .5;
 			circle.velX = 0;
 
 			var turn = (Math.random() * 360);
@@ -75,7 +77,7 @@
 			
 			container_rocks.addChild(circle);
 		}
-		//createjs.Ticker.setFPS(30000);
+		//createjs.Ticker.setFPS(1);
 		createjs.Ticker.addEventListener("tick", handleTick);
 
 
@@ -83,38 +85,50 @@
 
 	function handleTick(event) {
 		var r = container_rocks.getNumChildren();
-		console.log("FISH LEFT: " + pop.length);
+		//console.log("FISH LEFT: " + pop.length);
+		
 		for (var i = 0; i < pop.length; i++) {
 			var circle = pop[i].circle;
 
 
 			circle.y += circle.velY;
 			if(circle.y<0 || circle.y>h){
-				var turn = 180;
-				var rad = (turn*Math.PI)/180;
-				var cs = Math.cos(rad);
-				var sn = Math.sin(rad);
+//				var turn = 180;
+//				var rad = (turn*Math.PI)/180;
+//				var cs = Math.cos(rad);
+//				var sn = Math.sin(rad);
+//
+//				var px = circle.velX * cs - circle.velY * sn;
+//				var py = circle.velX * sn + circle.velY * cs;
+//
+//				circle.velX = px;
 
-				var px = circle.velX * cs - circle.velY * sn;
-				var py = circle.velX * sn + circle.velY * cs;
-
-				circle.velX = px;
-				circle.velY = py;
-				//continue;
+					stage.removeChildAt(i);
+					
+					pop.splice(i,1);
+					flag = 1;
+					i--;
+				circle.velY = -circle.velY;
+				continue;
 			}
 			circle.x += circle.velX;
 			if(circle.x<0 || circle.x>w){
-				var turn = 180;
-				var rad = (turn*Math.PI)/180;
-				var cs = Math.cos(rad);
-				var sn = Math.sin(rad);
-
-				var px = circle.velX * cs - circle.velY * sn;
-				var py = circle.velX * sn + circle.velY * cs;
-
-				circle.velX = px;
-				circle.velY = py;
-				//continue;
+//				var turn = 180;
+//				var rad = (turn*Math.PI)/180;
+//				var cs = Math.cos(rad);
+//				var sn = Math.sin(rad);
+//
+//				var px = circle.velX * cs - circle.velY * sn;
+//				var py = circle.velX * sn + circle.velY * cs;
+//				
+					stage.removeChildAt(i);
+					
+					pop.splice(i,1);
+					flag = 1;
+					i--;
+				circle.velX = - circle.velX;
+//				circle.velY = py;
+				continue;
 			}
 
 			/*
@@ -122,7 +136,37 @@
 				by smaller distances as the fish checks distance from all rocks
 				A lot of optimization can be done here
 			*/
-			var inputs = [Math.sqrt((w*w)+(h*h)),Math.sqrt((w*w)+(h*h)),Math.sqrt((w*w)+(h*h))];
+		var inputs = [(w-circle.x),
+						0,
+					 circle.y,
+					 0,
+					 circle.x,
+						0,
+					 (h-circle.y),
+					 0]
+			
+			inputs[1]=circle.y*Math.sqrt(2);
+			if((w-circle.x)<circle.y)
+				inputs[1]=(w-circle.x)*Math.sqrt(2);
+				
+				
+			inputs[3]=circle.y*Math.sqrt(2);
+			if(circle.x<circle.y)
+				inputs[3]=circle.x*Math.sqrt(2);
+				
+				
+				
+			inputs[5]=circle.x*Math.sqrt(2);
+			if((h-circle.y)<circle.x)
+				inputs[5]=(h-circle.y)*Math.sqrt(2);
+				
+				
+				
+			inputs[7]=(h-circle.y)*Math.sqrt(2);
+			if((w-circle.x)<(h-circle.y))
+				inputs[7]=(w-circle.x)*Math.sqrt(2);
+
+					   
 			var flag = 0;
 
 			for(var j = 0; j < r; j++){
@@ -137,6 +181,7 @@
 					
 					pop.splice(i,1);
 					flag = 1;
+					i--;
 					break;
 				}
 				// vector(rx,ry) is the vector from the center of the fish to the center of the rock
@@ -153,46 +198,100 @@
 //				console.log("Vy: " + circle.velY);
 //				console.log("");
 
-
-				var dot = (rx*circle.velX) + (ry*circle.velY);
+				var tx =1.0;
+				var ty=0;
+				var dot = (rx*tx) + (ry*ty);
 				updateInput(inputs,0, dot,distance);
 
 
 
-				var rad = (20*pi())/180;
+				var rad = (45*pi())/180;
 				var cs = Math.cos(rad);
 				var sn = Math.sin(rad);
 
-				var px = circle.velX * cs - circle.velY * sn;
-				var py = circle.velX * sn + circle.velY * cs;
+				var px = tx * cs - ty * sn;
+				var py = tx * sn + ty * cs;
 
 
 				dot = (rx*px) + (ry*py);
 				updateInput(inputs,1, dot,distance);
 
 
-				rad = (340*pi())/180;
+				rad = (90*pi())/180;
 				cs = Math.cos(rad);
 				sn = Math.sin(rad);
 
-				px = circle.velX * cs - circle.velY * sn;
-				py = circle.velX * sn + circle.velY * cs;
+				px = tx * cs - ty * sn;
+				py = tx * sn + ty * cs;
 
 
 				dot = (rx*px) + (ry*py);
 				updateInput(inputs,2, dot,distance);
+				
+				
+				
+				rad = (135*pi())/180;
+				cs = Math.cos(rad);
+				sn = Math.sin(rad);
+				px = tx * cs - ty * sn;
+				py = tx * sn + ty * cs;
+				dot = (rx*px) + (ry*py);
+				updateInput(inputs,3, dot,distance);
+				
+				
+				rad = (180*pi())/180;
+				cs = Math.cos(rad);
+				sn = Math.sin(rad);
+				px = tx * cs - ty * sn;
+				py = tx * sn + ty * cs;
+				dot = (rx*px) + (ry*py);
+				updateInput(inputs,4, dot,distance);
+				
+				rad = (225*pi())/180;
+				cs = Math.cos(rad);
+				sn = Math.sin(rad);
+				px = tx * cs - ty * sn;
+				py = tx * sn + ty * cs;
+				dot = (rx*px) + (ry*py);
+				updateInput(inputs,5, dot,distance);
+				
+				
+				rad = (270*pi())/180;
+				cs = Math.cos(rad);
+				sn = Math.sin(rad);
+				px = tx * cs - ty * sn;
+				py = tx * sn + ty * cs;
+				dot = (rx*px) + (ry*py);
+				updateInput(inputs,6, dot,distance);
+				
+				
+				rad = (315*pi())/180;
+				cs = Math.cos(rad);
+				sn = Math.sin(rad);
+				px = tx * cs - ty * sn;
+				py = tx * sn + ty * cs;
+				dot = (rx*px) + (ry*py);
+				updateInput(inputs,7, dot,distance);
+				
+				
 
 			}
-			if(flag==1){
-				continue;
-			}
+			
+			//console.log(inputs);
 
 			//console.log(inputs);
 
 			//normalize inputs what range to we actually care about
 			//how far can the fish see infinite ???
 
-			var netInputs = [inputs[0]/Math.sqrt((w*w)+(h*h)),inputs[1]/Math.sqrt((w*w)+(h*h)),inputs[2]/Math.sqrt((w*w)+(h*h))];
+			var netInputs = [inputs[0]/((w/2)*Math.sqrt(2)),
+							 inputs[1]/((w/2)*Math.sqrt(2)),
+							 inputs[2]/((w/2)*Math.sqrt(2)),
+							 inputs[3]/((w/2)*Math.sqrt(2)),
+							 inputs[4]/((w/2)*Math.sqrt(2)),
+							 inputs[5]/((w/2)*Math.sqrt(2)),
+							 inputs[6]/((w/2)*Math.sqrt(2)),
+							 inputs[7]/((w/2)*Math.sqrt(2))];
 			
 			pop[i].net.feedForward(netInputs);
 			//feed into net for the correct fish
@@ -200,20 +299,33 @@
 
 			//get turn output
 			//vector math to turn each fish, currently random
-			var out = pop[i].net.getResults()[0];
-			var turn = out*5;
-			var rad = (turn*pi())/180;
-			var cs = Math.cos(rad);
-			var sn = Math.sin(rad);
+			var out1 = pop[i].net.getResults()[0];
+			var out2 = pop[i].net.getResults()[1];
+			
+//			var turn = out*180;
+//			var rad = (turn*pi())/180;
+//			var cs = Math.cos(rad);
+//			var sn = Math.sin(rad);
+//
+//			var px = circle.velX * cs - circle.velY * sn;
+//			var py = circle.velX * sn + circle.velY * cs;
 
-			var px = circle.velX * cs - circle.velY * sn;
-			var py = circle.velX * sn + circle.velY * cs;
-
-			circle.velX = px;
-			circle.velY = py;
+			circle.velX = out1*2;
+			circle.velY = out2*2;
 
 		}
 		
+		moveRocks();
+		stage.update();
+	}
+	
+		
+	/** 
+	* updates the location of the rocks
+	*/
+	function  moveRocks() {
+		
+		var r = container_rocks.getNumChildren();
 		
 		for(var j = 0; j < r; j++){
 			var rock = container_rocks.getChildAt(j);
@@ -221,19 +333,21 @@
 			if(rock.y<0 || rock.y>h){
 
 				rock.velY = -rock.velY;
-				continue;
 			}
 			rock.x += rock.velX;
-			
 			if(rock.x<0 || rock.x>w){
 				rock.velX = -rock.velX;
-				continue;
+
 			}
 		}
 
-		stage.update();
 	}
-
+	
+	
+	/** 
+	* @param inputs
+	* 	The array of inputs to the net
+	*/	
 	function updateInput(inputs,inputnumber, dot, distance) {
 
 			var theta = Math.acos(dot);
@@ -283,3 +397,8 @@
 	function pi() {
 		return Math.PI;
 	}
+	
+	
+	
+	
+	
