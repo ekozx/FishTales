@@ -3,8 +3,9 @@ extends layout
 block content
   body(onload='init();')
     .container
-        h1#hello= title
-        p Welcome to #{title}
+        h1 Fish Tales!
+        p The web app where you can track your favorite fish via his neural network! Aren't you excited? 
+        p Wow! I like that enthusiam. Go ahead, click on a fish.
         canvas#demoCanvas(width='1080', height='720')
         script(type="text/javascript", src='/javascripts/models/Neuron.js')
         script(type="text/javascript", src='/javascripts/models/Net.js')
