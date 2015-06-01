@@ -1,6 +1,7 @@
 /* global z */
 	var container;
 	var container_rocks;
+	var generation;
 	//length of fish sensor
 	var sensor_length = 10;
 	var w;
@@ -9,8 +10,11 @@
 	
 
 	var pop = [];
+	var dead = [];
 
 	function init() {
+		
+		generation = 0;
 		// create a new stage and point it at our canvas:
 		canvas = document.getElementById("demoCanvas");
 		stage = new createjs.Stage(canvas);
@@ -21,11 +25,11 @@
 		var mother = new Fish();
 		var father = new Fish();
 		
-		var child  = mother.makeChild(father);
-		console.log(mother.net.getChromosome());
-		console.log(father.net.getChromosome());
-		console.log(child.net.getChromosome());
-		
+//		var child  = mother.makeChild(father);
+//		console.log(mother.net.getChromosome());
+//		console.log(father.net.getChromosome());
+//		console.log(child.net.getChromosome());
+//		
 //		var net = new Net([8,2]);
 //		net.feedForward([.5,.4,.3,.2,.5,.4,.3,.2]);
 //		var net = new Net([4, 1000, 2]);
@@ -34,13 +38,15 @@
 //		var results = net.getResults();
 //		console.log(results);
 
-		for (var i = 0; i < 1000; i++) {
+		container = new createjs.Container();
+		stage.addChild(container);
+
+		for (var i = 0; i < 100; i++) {
 			var fish = new Fish();
 			fish.circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 10);
 			
 			fish.circle.x = Math.random() * w;
 			fish.circle.y = Math.random() * h;
-			
 			
 			fish.circle.velY = 1.0;
 			fish.circle.velX = 0;
@@ -57,13 +63,13 @@
 			fish.circle.velY = py;
 
 			pop.push(fish);
-			stage.addChild(fish.circle);
+			container.addChild(fish.circle);
 		}
 	
 	
 		container_rocks = new createjs.Container();
 		stage.addChild(container_rocks);
-
+		
 
 		for (var i = 0; i < 15; i++) {
 			var circle = new createjs.Shape();
@@ -102,6 +108,13 @@
 
 
 		for (var i = 0; i < pop.length; i++) {
+			
+			if(pop[i]==null){
+				console.log("TYPE "+ pop[i]);
+				console.log("Index "+ i);
+				console.log("Length "+ pop.length);
+			}
+			
 			var circle = pop[i].circle;
 
 
@@ -117,12 +130,10 @@
 //
 //				circle.velX = px;
 
-					stage.removeChildAt(i);
-					
-					pop.splice(i,1);
-					flag = 1;
-					i--;
-				circle.velY = -circle.velY;
+				container.removeChildAt(i);
+				dead.push(pop[i]);
+				pop.splice(i,1);
+				i--;
 				continue;
 			}
 			circle.x += circle.velX;
@@ -135,13 +146,10 @@
 //				var px = circle.velX * cs - circle.velY * sn;
 //				var py = circle.velX * sn + circle.velY * cs;
 //				
-					stage.removeChildAt(i);
-					
-					pop.splice(i,1);
-					flag = 1;
-					i--;
-				circle.velX = - circle.velX;
-//				circle.velY = py;
+				container.removeChildAt(i);
+				dead.push(pop[i]);
+				pop.splice(i,1);
+				i--;
 				continue;
 			}
 
@@ -191,8 +199,8 @@
 
 				if (distance < 10 + 50) {
 					//fish i had a collision with rock j remove it from the screen and continue
-					stage.removeChildAt(i);
-					
+					container.removeChildAt(i);
+					dead.push(pop[i]);
 					pop.splice(i,1);
 					flag = 1;
 					i--;
@@ -330,7 +338,36 @@
 		}
 		
 		moveRocks();
+		
+		
+				
 		stage.update();
+		
+	if(pop.length==0){
+		generation ++;
+		console.log("New generation: "+generation);
+		//console.log("Number of dead fish: " + dead.length);
+		//move to next generation of fish
+		dead.splice(dead.length/2,dead.length);
+		
+		for(var i=0;i<20;i++){
+			var fish3 = dead[dead.length-i-1];
+			pop.push(fish3);
+			container.addChild(fish3.circle);
+		}
+		
+		for(var i=0;i<80;i++){
+			//console.log(Math.round(Math.random()*dead.length));
+			var fish2 = dead[Math.round(Math.random()*(dead.length-1))].makeChild(dead[Math.floor(Math.random()*(dead.length-1))]);
+			//var fish = dead[1].makeChild(dead[0]);
+			pop.push(fish2);
+			container.addChild(fish2.circle);
+		}
+		stage.update();
+		dead = [];
+	}	
+		
+		
 	}
 	
 		
