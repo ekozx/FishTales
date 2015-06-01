@@ -18,8 +18,13 @@
 		w = canvas.width;
 		h = canvas.height;
 
+<<<<<<< HEAD
 //		var net = new Net([8,2]);
 //		net.feedForward([.5,.4,.3,.2,.5,.4,.3,.2]);
+=======
+//		var net = new Net([4, 1000, 2]);
+//		net.feedForward([.5,.4,.3,.2]);
+>>>>>>> 6cb94e57bdd90281dce7e6e68a5ba84022f1cbe7
 //		var results = net.getResults();
 //		console.log(results);
 
@@ -86,8 +91,10 @@
 
 	function handleTick(event) {
 		var r = container_rocks.getNumChildren();
+
 		//console.log("FISH LEFT: " + pop.length);
-		
+
+
 		for (var i = 0; i < pop.length; i++) {
 			var circle = pop[i].circle;
 
