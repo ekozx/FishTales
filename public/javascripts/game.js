@@ -23,10 +23,14 @@
 		stage.addChild(container);
 		stage.addChild(container_rocks);
 
-		var net = new Net([4, 1000, 2]);
+		var net = new Net([3, 4, 2]);
 		net.feedForward([.5,.4,.3,.2]);
 		var results = net.getResults();
 		console.log(results);
+		var chromosome = net.getChromosome();
+		console.log(chromosome);
+		var net2 = new Net([3, 4, 2]);
+		net2.setChromosome(chromosome);
 
 		for (var i = 0; i < 1; i++) {
 			var circle = new createjs.Shape();

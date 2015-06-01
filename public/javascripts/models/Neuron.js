@@ -33,6 +33,14 @@ function buildConnections(numOutputs) {
 	return connections;
 }
 /**
+ * Sets the edge weights for each connection on the neuron.
+ * @param weights
+ * 		an array of flaots for the weights to set
+ */
+ Neuron.prototype.setWeights = function(weights) {
+	 
+ };
+/**
  * @param x
  * 		The input for the hyperbolic tangent function.
  * @returns
