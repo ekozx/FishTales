@@ -1,5 +1,5 @@
 var Fish = function() {
-	this.net = new Net([8,2]);
+	this.net = new Net([8,10,2]);
 	this.circle = new createjs.Shape();
 }
 /**

@@ -41,7 +41,7 @@
 		container = new createjs.Container();
 		stage.addChild(container);
 
-		for (var i = 0; i < 100; i++) {
+		for (var i = 0; i < 300; i++) {
 			var fish = new Fish();
 			fish.circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 10);
 			
@@ -71,7 +71,7 @@
 		stage.addChild(container_rocks);
 		
 
-		for (var i = 0; i < 15; i++) {
+		for (var i = 0; i < 25; i++) {
 			var circle = new createjs.Shape();
 			circle.graphics.beginFill("red").drawCircle(0, 0, 50);
 			circle.x = Math.random() * w;
@@ -109,11 +109,7 @@
 
 		for (var i = 0; i < pop.length; i++) {
 			
-			if(pop[i]==null){
-				console.log("TYPE "+ pop[i]);
-				console.log("Index "+ i);
-				console.log("Length "+ pop.length);
-			}
+	
 			
 			var circle = pop[i].circle;
 
@@ -298,6 +294,9 @@
 				
 
 			}
+			if(flag==1){
+				continue;
+			}
 			
 			//console.log(inputs);
 
@@ -323,6 +322,17 @@
 			//vector math to turn each fish, currently random
 			var out1 = pop[i].net.getResults()[0];
 			var out2 = pop[i].net.getResults()[1];
+			
+			
+			var speed = Math.sqrt((out1*out1)+(out2*out2));
+			
+			if(speed<.08){
+				container.removeChildAt(i);
+				dead.push(pop[i]);
+				pop.splice(i,1);
+				i--;
+				continue;
+			}
 			
 //			var turn = out*180;
 //			var rad = (turn*pi())/180;
@@ -350,19 +360,56 @@
 		//move to next generation of fish
 		dead.splice(dead.length/2,dead.length);
 		
-		for(var i=0;i<20;i++){
+		
+		
+		for(var i=0;i<50;i++){
 			var fish3 = dead[dead.length-i-1];
+			var coor = placefish();
+			fish3.circle.x=coor[0];
+			fish3.circle.y=coor[1];
 			pop.push(fish3);
 			container.addChild(fish3.circle);
 		}
 		
-		for(var i=0;i<80;i++){
+		for(var i=0;i<200;i++){
 			//console.log(Math.round(Math.random()*dead.length));
 			var fish2 = dead[Math.round(Math.random()*(dead.length-1))].makeChild(dead[Math.floor(Math.random()*(dead.length-1))]);
 			//var fish = dead[1].makeChild(dead[0]);
+			var coor2 = placefish();
+			fish2.circle.x=coor2[0];
+			fish2.circle.y=coor2[1];
 			pop.push(fish2);
 			container.addChild(fish2.circle);
 		}
+		
+		
+		for(var i=0;i<50;i++){
+			//random fish added to the population as well
+			var fish = new Fish();
+			fish.circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 10);
+			
+			var coor3 = placefish();
+			fish.circle.x=coor3[0];
+			fish.circle.y=coor3[1];
+			
+			fish.circle.velY = 1.0;
+			fish.circle.velX = 0;
+
+			var turn2 = (Math.random() * 360);
+			var rad2 = (turn2*Math.PI)/180;
+			var cs2 = Math.cos(rad2);
+			var sn2 = Math.sin(rad2);
+
+			var px2 = fish.circle.velX * cs2 - fish.circle.velY * sn2;
+			var py2 = fish.circle.velX * sn2 + fish.circle.velY * cs2;
+
+			fish.circle.velX = px2;
+			fish.circle.velY = py2;
+
+			pop.push(fish);
+			container.addChild(fish.circle);
+		}
+		
 		stage.update();
 		dead = [];
 	}	
@@ -388,8 +435,10 @@
 			rock.x += rock.velX;
 			if(rock.x<0 || rock.x>w){
 				rock.velX = -rock.velX;
+				Math.random()
 
 			}
+			
 		}
 
 	}
@@ -449,7 +498,39 @@
 		return Math.PI;
 	}
 	
-	
+	function placefish() {
+		
+		var output = [Math.random() * w,Math.random() * h];
+		var r = container_rocks.getNumChildren();
+
+		
+		while(1){	
+			var collision = 0;
+			
+			for(var j = 0; j < r; j++){
+				var rock = container_rocks.getChildAt(j);
+				var xDist = rock.x - output[0];
+				var yDist = rock.y - output[1];
+				var distance = Math.sqrt(xDist*xDist + yDist*yDist);
+				
+				
+				if (distance < 10 + 70) {
+					collision = 1;
+				}
+				
+			}
+			
+			if(collision==0){
+				break;
+			}
+			output = [Math.random() * w, Math.random() * h]
+			
+		}
+		
+		
+		return output;
+		
+	}
 	
 	
 	
