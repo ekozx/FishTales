@@ -18,7 +18,14 @@
 		w = canvas.width;
 		h = canvas.height;
 
-
+		var mother = new Fish();
+		var father = new Fish();
+		
+		var child  = mother.makeChild(father);
+		console.log(mother.net.getChromosome());
+		console.log(father.net.getChromosome());
+		console.log(child.net.getChromosome());
+		
 //		var net = new Net([8,2]);
 //		net.feedForward([.5,.4,.3,.2,.5,.4,.3,.2]);
 
