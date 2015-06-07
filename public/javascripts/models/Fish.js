@@ -1,7 +1,10 @@
 var Fish = function() {
-	this.net = new Net([8,20,2]);
+	this.net = new Net([4,6,1]);
 	this.circle = new createjs.Shape();
 	this.tick = 0;
+	this.fitness = 0;
+	this.dead=0;
+	this.hunger=100;
 }
 /**
  * Creates a baby fish, so cute
@@ -37,13 +40,13 @@ Fish.prototype.makeChild = function (maleParent) {
 	
 	var fish = new Fish();
 	
-	fish.circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 10);
+	fish.circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 20);
 			
 	fish.circle.x = Math.random() * w;
 	fish.circle.y = Math.random() * h;
 			
 			
-	fish.circle.velY = 1.0;
+	fish.circle.velY = 5;
 	fish.circle.velX = 0;
 
 	var turn = (Math.random() * 360);
@@ -56,6 +59,11 @@ Fish.prototype.makeChild = function (maleParent) {
 
 	fish.circle.velX = px;
 	fish.circle.velY = py;
+	
+	fish.tick=0;
+	fish.fitness=0;
+	fish.dead=0;
+	fish.hunder=100;
 	
 	
 	fish.net.setChromosome(joinedChromosome);
@@ -75,5 +83,5 @@ Fish.prototype.makeChild = function (maleParent) {
  * 		The mutation rate of the fish
  */
 function getMutationRate() {
-	return .05;
+	return .06;
 }
