@@ -1,6 +1,7 @@
 var Fish = function() {
-	this.net = new Net([8,10,2]);
+	this.net = new Net([8,20,2]);
 	this.circle = new createjs.Shape();
+	this.tick = 0;
 }
 /**
  * Creates a baby fish, so cute

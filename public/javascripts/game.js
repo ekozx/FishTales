@@ -22,14 +22,7 @@
 		w = canvas.width;
 		h = canvas.height;
 
-		var mother = new Fish();
-		var father = new Fish();
-		
-//		var child  = mother.makeChild(father);
-//		console.log(mother.net.getChromosome());
-//		console.log(father.net.getChromosome());
-//		console.log(child.net.getChromosome());
-//		
+
 //		var net = new Net([8,2]);
 //		net.feedForward([.5,.4,.3,.2,.5,.4,.3,.2]);
 //		var net = new Net([4, 1000, 2]);
@@ -41,7 +34,7 @@
 		container = new createjs.Container();
 		stage.addChild(container);
 
-		for (var i = 0; i < 300; i++) {
+		for (var i = 0; i < 3000; i++) {
 			var fish = new Fish();
 			fish.circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 10);
 			
@@ -71,7 +64,7 @@
 		stage.addChild(container_rocks);
 		
 
-		for (var i = 0; i < 25; i++) {
+		for (var i = 0; i < 21; i++) {
 			var circle = new createjs.Shape();
 			circle.graphics.beginFill("red").drawCircle(0, 0, 50);
 			circle.x = Math.random() * w;
@@ -79,7 +72,7 @@
 			
 			
 			
-			circle.velY = .5;
+			circle.velY = .4;
 			circle.velX = 0;
 
 			var turn = (Math.random() * 360);
@@ -109,7 +102,7 @@
 
 		for (var i = 0; i < pop.length; i++) {
 			
-	
+			pop[i].tick ++;
 			
 			var circle = pop[i].circle;
 
@@ -161,7 +154,7 @@
 					 circle.x,
 						0,
 					 (h-circle.y),
-					 0]
+					 0];
 			
 			inputs[1]=circle.y*Math.sqrt(2);
 			if((w-circle.x)<circle.y)
@@ -304,15 +297,21 @@
 
 			//normalize inputs what range to we actually care about
 			//how far can the fish see infinite ???
-
-			var netInputs = [inputs[0]/((w/2)*Math.sqrt(2)),
-							 inputs[1]/((w/2)*Math.sqrt(2)),
-							 inputs[2]/((w/2)*Math.sqrt(2)),
-							 inputs[3]/((w/2)*Math.sqrt(2)),
-							 inputs[4]/((w/2)*Math.sqrt(2)),
-							 inputs[5]/((w/2)*Math.sqrt(2)),
-							 inputs[6]/((w/2)*Math.sqrt(2)),
-							 inputs[7]/((w/2)*Math.sqrt(2))];
+			
+			
+			//console.log(inputs);
+			
+			var netInputs = [(inputs[0]/((w)*Math.sqrt(2))),
+							 (inputs[1]/((w)*Math.sqrt(2))),
+							 (inputs[2]/((w)*Math.sqrt(2))),
+							 (inputs[3]/((w)*Math.sqrt(2))),
+							 (inputs[4]/((w)*Math.sqrt(2))),
+							 (inputs[5]/((w)*Math.sqrt(2))),
+							 (inputs[6]/((w)*Math.sqrt(2))),
+							 (inputs[7]/((w)*Math.sqrt(2)))];
+							 
+			//console.log(netInputs)
+			
 			
 			pop[i].net.feedForward(netInputs);
 			//feed into net for the correct fish
@@ -320,30 +319,38 @@
 
 			//get turn output
 			//vector math to turn each fish, currently random
+			
 			var out1 = pop[i].net.getResults()[0];
 			var out2 = pop[i].net.getResults()[1];
+			//console.log(turn_net);
 			
+			//console.log(out1);
 			
-			var speed = Math.sqrt((out1*out1)+(out2*out2));
-			
-			if(speed<.08){
-				container.removeChildAt(i);
-				dead.push(pop[i]);
-				pop.splice(i,1);
-				i--;
-				continue;
-			}
-			
-//			var turn = out*180;
+//			var speed = Math.sqrt((out1*out1)+(out2*out2));
+//			
+//			if(speed<.07){
+//				container.removeChildAt(i);
+//				dead.push(pop[i]);
+//				pop.splice(i,1);
+//				i--;
+//				continue;
+//			}
+////			
+//			var turn = turn_net*45;
 //			var rad = (turn*pi())/180;
 //			var cs = Math.cos(rad);
 //			var sn = Math.sin(rad);
 //
 //			var px = circle.velX * cs - circle.velY * sn;
 //			var py = circle.velX * sn + circle.velY * cs;
+//			
+//		
+//			circle.velX = px;
+//			circle.velY = py;
 
-			circle.velX = out1*2;
-			circle.velY = out2*2;
+			
+			circle.velX = out1*5;
+			circle.velY = out2*5;
 
 		}
 		
@@ -356,34 +363,37 @@
 	if(pop.length==0){
 		generation ++;
 		console.log("New generation: "+generation);
+		console.log("BEST INDIVIDUAL: "+dead[dead.length-1].tick);
 		//console.log("Number of dead fish: " + dead.length);
 		//move to next generation of fish
-		dead.splice(dead.length/2,dead.length);
+		dead.splice(2500,dead.length);
 		
 		
 		
-		for(var i=0;i<50;i++){
+		for(var i=0;i<1000;i++){
 			var fish3 = dead[dead.length-i-1];
 			var coor = placefish();
 			fish3.circle.x=coor[0];
 			fish3.circle.y=coor[1];
+			fish3.tick=0;
 			pop.push(fish3);
 			container.addChild(fish3.circle);
 		}
 		
-		for(var i=0;i<200;i++){
+		for(var i=0;i<3500;i++){
 			//console.log(Math.round(Math.random()*dead.length));
-			var fish2 = dead[Math.round(Math.random()*(dead.length-1))].makeChild(dead[Math.floor(Math.random()*(dead.length-1))]);
+			var fish2 = dead[Math.round(Math.random()*(dead.length-1))].makeChild(dead[Math.floor(Math.random()*(dead.length-150))+149]);
 			//var fish = dead[1].makeChild(dead[0]);
 			var coor2 = placefish();
 			fish2.circle.x=coor2[0];
 			fish2.circle.y=coor2[1];
+			fish2.tick=0;
 			pop.push(fish2);
 			container.addChild(fish2.circle);
 		}
 		
 		
-		for(var i=0;i<50;i++){
+		for(var i=0;i<500;i++){
 			//random fish added to the population as well
 			var fish = new Fish();
 			fish.circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 10);
@@ -405,6 +415,7 @@
 
 			fish.circle.velX = px2;
 			fish.circle.velY = py2;
+			fish.tick=0;
 
 			pop.push(fish);
 			container.addChild(fish.circle);
@@ -435,7 +446,6 @@
 			rock.x += rock.velX;
 			if(rock.x<0 || rock.x>w){
 				rock.velX = -rock.velX;
-				Math.random()
 
 			}
 			
