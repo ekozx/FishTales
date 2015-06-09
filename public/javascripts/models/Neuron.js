@@ -61,6 +61,8 @@ function buildConnections(numOutputs) {
 		  sum += prevLayer[index].outputVal * 
 		  		prevLayer[index].connectionWeights[this.index];
 	  }
-	  //sum/=(prevLayer.size()/2.0);
+	  //console.log(sum);
+	  sum/=(prevLayer.length/2.0);
+	  //console.log(sum);
 	  this.outputVal = transferFunction(sum);
   }
