@@ -22,9 +22,9 @@ body {
   text-align: center;
 }
 #demoCanvas {
-  height: 500px;
   display: block;
   margin: auto;
+  height:80%;
 }
 navbar {
   padding-bottom: 10px;
@@ -43,13 +43,22 @@ navbar > a {
   margin-right: 30px;
   text-decoration: none;
 }
+.options {
+
+}
 .options-anchor {
-  float: right;
+  cursor: pointer;
 }
 .options-navbar {
   padding: 0 !important;
   float:right;
   width: initial;
+}
+.stats-container, .options-container  {
+  display: none;
+  position:absolute;
+  background-color: #e7e7e7;
+  width: 100%;
 }
 .title {
   margin-left: 30px;

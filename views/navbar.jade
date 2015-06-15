@@ -4,5 +4,15 @@ navbar
 	a(href='/') home
 	a(href='/about') about
 navbar.options-navbar
-	a.options-anchor('#') Options
-	a.options-anchor('#') Stats
+	a#options.options-anchor('#') Options
+		.options-container
+			ul.options
+				li option 1
+				li option 2
+				li option 3
+	a#stats.options-anchor('#') Stats
+		.stats-container
+			ul.options
+				li stat 1
+				li stat 2
+				li stat 3
