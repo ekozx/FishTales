@@ -27,9 +27,10 @@ body {
   margin: auto;
 }
 navbar {
-  padding-bottom: 20px;
-  padding-top: 20px;
+  padding-bottom: 10px;
+  padding-top: 10px;
   background: #e7e7e7;
+  border-radius: 0px !important;
 /*  min-width: 750px;*/
   border-radius: 4px;
   border-color: #e7e7e7;
@@ -41,6 +42,14 @@ navbar > a {
   margin-left: 30px;
   margin-right: 30px;
   text-decoration: none;
+}
+.options-anchor {
+  float: right;
+}
+.options-navbar {
+  padding: 0 !important;
+  float:right;
+  width: initial;
 }
 .title {
   margin-left: 30px;
