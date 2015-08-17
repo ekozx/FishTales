@@ -25,13 +25,6 @@ Fish.prototype.makeChild = function (maleParent) {
   var fatherSide = fatherChromosome.splice(splitPoint, fatherChromosome.length);
   var joinedChromosome = motherSide.concat(fatherSide);
 
-//  if(joinedChromosome.length !== fatherChromosome.length) {
-//    console.log("Joined chromosome has an incorrect size!");
-//    console.log("FATHER LEN: "+ fatherChromosome.length);
-//    console.log("MOTHER LEN: "+ motherChromosome.length);
-//    console.log("BABY   LEN: "+ joinedChromosome.length);
-//  }
-//
   for (var i = 0; i < joinedChromosome.length; i++) {
     if(Math.random() < getMutationRate()) {
       joinedChromosome[i] = Math.random() * 2 - 1;
