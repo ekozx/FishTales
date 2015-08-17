@@ -20,6 +20,8 @@ function init() {
   // create a new stage and point it at our canvas:
   canvas = document.getElementById("demoCanvas");
   stage = new createjs.Stage(canvas);
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight - 42; // temporary fix
 
   w = canvas.width;
   h = canvas.height;

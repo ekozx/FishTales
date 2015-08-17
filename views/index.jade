@@ -3,7 +3,7 @@ extends layout
 block content
   body(onload='init();')
     .container
-        canvas#demoCanvas(width='1080', height='720')
+        canvas#demoCanvas
         script(type="text/javascript", src='/javascripts/models/Neuron.js')
         script(type="text/javascript", src='/javascripts/models/Net.js')
         script(type="text/javascript", src='/javascripts/models/Fish.js')
