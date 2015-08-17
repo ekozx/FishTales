@@ -1,4 +1,4 @@
-@media(max-width: 1200px) {
+/* @media(max-width: 1200px) {
     .container {
         margin: 0 50px;
     }
@@ -7,7 +7,7 @@
         height: auto;
     }
 }
-
+ */
 a {
   color: #26AEFF;
 }
@@ -20,11 +20,12 @@ body {
 .container {
   width: 100%;
   text-align: center;
+  background: #0E2837;
 }
 #demoCanvas {
   display: block;
   margin: auto;
-  height:80%;
+  width: 100%;
 }
 navbar {
   padding-bottom: 10px;
