@@ -15,7 +15,7 @@
     "mongodb": "*",
     "mongoose": "^4.0.1",
     "morgan": "~1.0.0",
-    "static-favicon": "~1.0.0",
-    "nodemon": "*"
+    "nodemon": "*",
+    "static-favicon": "~1.0.0"
   }
 }

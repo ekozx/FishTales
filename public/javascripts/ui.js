@@ -1,11 +1,11 @@
 $(document).ready(function() {
   $('#options').click(function() {
     $('.stats-container').fadeOut();
-    $('.options-container').fadeIn();
+    $('.options-container').fadeToggle();
   });
   $('#stats').click(function() {
     $('.options-container').fadeOut();
-    $('.stats-container').fadeIn();
+    $('.stats-container').fadeToggle();
   });
   $('.container').click(function() {
     $('.options-container').fadeOut();

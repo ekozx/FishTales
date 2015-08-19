@@ -11,6 +11,8 @@
   var population_size = 14;
   var fish_radius = 20;
   var fish_speed = 5;
+  var generationTime = 1000;
+
   var counter;
   var pop = [];
   var dead = [];
@@ -36,7 +38,6 @@ function init() {
 
     fish.circle.x = Math.random() * w;
     fish.circle.y = Math.random() * h;
-
     fish.circle.velY = fish_speed;
     fish.circle.velX = 0;
 
@@ -168,10 +169,6 @@ function handleTick(event) {
     //vector math to turn each fish, currently random
 
     var out1 = pop[i].net.getResults()[0];
-    //var out2 = pop[i].net.getResults()[1];
-    //console.log(turn_net);
-
-    //console.log(out1);
 
     var turn = out1*45;
     var rad = (turn*pi())/180;
@@ -187,9 +184,10 @@ function handleTick(event) {
   }
 
   stage.update();
-  console.log(counter/10);
-  if(counter>1000){
+  if(counter> generationTime){
     counter = 0;
+    var displayGeneration = generation + 1;
+    $("#generation").text("Generation:" + displayGeneration);
     generation ++;
     console.log("New generation: "+generation);
     pop.sort(compare);
@@ -203,6 +201,9 @@ function handleTick(event) {
     var coor = placefish();
     fish.circle.x=coor[0];
     fish.circle.y=coor[1];
+
+    generationTime = $('#time-slider').val();
+    fish_speed = $('#speed-slider').val();
 
     fish.circle.velY = fish_speed;
     fish.circle.velX = 0;
@@ -222,9 +223,6 @@ function handleTick(event) {
 
     pop[0]=fish;
     container.addChild(fish.circle);
-
-
-
 
     for(var i=1;i<population_size/2;i++){
       fish = pop[population_size-1].makeChild(pop[population_size-i-1]);
@@ -281,7 +279,6 @@ function  moveRocks() {
 */
 function updateInput(inputs,inputnumber, dot, distance) {
   var theta = Math.acos(dot);
-  //console.log("ANGLE Between them:"+theta*180/Math.PI);
 
   if(theta>Math.pi/2){
     //angle to large ingore
