@@ -1,11 +1,12 @@
 navbar
 	a(href='/') 
 		h4.title Fish Tales
-	a(href='/') home
-	a(href='/about') about
+	a#about.options-anchor(href='#') about
+		.about-container.nav-container
+			include about.jade
 	a#options.options-anchor('#') options
-		.options-container
+		.options-container.nav-container
 			include options.jade
 	a#stats.options-anchor('#') stats
-		.stats-container
+		.stats-container.nav-container
 			include stats.jade

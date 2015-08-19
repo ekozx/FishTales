@@ -97,8 +97,13 @@ function init() {
 }
 
 
-
 function handleTick(event) {
+  if(!event.paused) {
+    actOnTick(event);
+  }
+}
+
+function actOnTick(event ) {
   counter++;
   for (var i = 0; i < pop.length; i++) {
     var circle = pop[i].circle;

@@ -4,7 +4,4 @@ block content
   body(onload='init();')
     .container
         canvas#demoCanvas
-        script(type="text/javascript", src='/javascripts/models/Neuron.js')
-        script(type="text/javascript", src='/javascripts/models/Net.js')
-        script(type="text/javascript", src='/javascripts/models/Fish.js')
-        script(type="text/javascript", src='/javascripts/game.js')
+        include onLoadScripts.jade

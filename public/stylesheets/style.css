@@ -56,7 +56,7 @@ navbar > a {
   float:right;
   width: initial;
 }
-.stats-container, .options-container  {
+.stats-container, .options-container, .about-container {
   display: none;
   position:absolute;
   background-color: #e7e7e7;
