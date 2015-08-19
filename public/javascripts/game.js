@@ -187,7 +187,7 @@ function handleTick(event) {
   }
 
   stage.update();
-
+  console.log(counter/10);
   if(counter>1000){
     counter = 0;
     generation ++;

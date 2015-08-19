@@ -58,7 +58,6 @@ Fish.prototype.makeChild = function (maleParent) {
   fish.dead=0;
   fish.hunder=100;
 
-
   fish.net.setChromosome(joinedChromosome);
   return fish;
 };
