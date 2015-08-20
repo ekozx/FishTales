@@ -20,4 +20,7 @@ $(document).ready(function() {
   $('#pause').click(function() {
     createjs.Ticker.paused = !createjs.Ticker.paused;
   });
+  $('#killall').click(function() {
+    createNewGeneration(); //from game.js
+  })
 });
