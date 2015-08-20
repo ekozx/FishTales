@@ -6,6 +6,7 @@
   //length of fish sensor
   var w;
   var h;
+  var bestFitness = 0;
   var food_count = 50;
   var food_radius = 10;
   var population_size = 14;
@@ -191,12 +192,12 @@ function actOnTick(event ) {
   stage.update();
   if(counter> generationTime){
     counter = 0;
-    var displayGeneration = generation + 1;
-    $("#generation").text("Generation:" + displayGeneration);
+
     generation ++;
     console.log("New generation: "+generation);
     pop.sort(compare);
-    console.log("Best Fitness: "+pop[population_size-1].fitness);
+    var latestBestFitness = pop[population_size-1].fitness;
+    console.log("Best Fitness: " + latestBestFitness);
 
     container.removeAllChildren();
 
@@ -207,8 +208,7 @@ function actOnTick(event ) {
     fish.circle.x=coor[0];
     fish.circle.y=coor[1];
 
-    generationTime = $('#time-slider').val();
-    fish_speed = $('#speed-slider').val();
+    updateUserInterface(latestBestFitness, generation);
 
     fish.circle.velY = fish_speed;
     fish.circle.velX = 0;
@@ -327,4 +327,14 @@ function pi() {
 function placefish() {
   var output = [Math.random() * w,Math.random() * h];
   return output;
+}
+function updateUserInterface(latestBestFitness) {
+  var displayGeneration = generation + 1;
+  $("#generation").text("Generation:" + displayGeneration);
+  generationTime = $('#time-slider').val();
+  fish_speed = $('#speed-slider').val();
+  if(latestBestFitness > bestFitness) {
+    bestFitness = latestBestFitness;
+  }
+  $('#best-fitness').text("Best fitness: " + bestFitness);
 }
