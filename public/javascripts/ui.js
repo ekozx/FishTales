@@ -18,6 +18,6 @@ $(document).ready(function() {
     $('.nav-container').fadeOut();
   });
   $('#pause').click(function() {
-    createjs.Ticker.paused = !createjs.Ticket.paused;
+    createjs.Ticker.paused = !createjs.Ticker.paused;
   });
 });
