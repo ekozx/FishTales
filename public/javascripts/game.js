@@ -169,13 +169,10 @@ function actOnTick(event ) {
 
     pop[i].net.feedForward(netInputs);
     //feed into net for the correct fish
-    //fish.net.feed(inputs)
-
     //get turn output
     //vector math to turn each fish, currently random
 
     var out1 = pop[i].net.getResults()[0];
-
     var turn = out1*45;
     var rad = (turn*pi())/180;
     var cs = Math.cos(rad);
@@ -184,77 +181,19 @@ function actOnTick(event ) {
     var px = circle.velX * cs - circle.velY * sn;
     var py = circle.velX * sn + circle.velY * cs;
 
-
     circle.velX = px;
     circle.velY = py;
   }
 
   stage.update();
   if(counter> generationTime){
-    counter = 0;
-
-    generation ++;
-    console.log("New generation: "+generation);
-    pop.sort(compare);
-    var latestBestFitness = pop[population_size-1].fitness;
-    console.log("Best Fitness: " + latestBestFitness);
-
-    container.removeAllChildren();
-
-    var fish = new Fish();
-    fish.circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, fish_radius);
-
-    var coor = placefish();
-    fish.circle.x=coor[0];
-    fish.circle.y=coor[1];
-
-    updateUserInterface(latestBestFitness, generation);
-
-    fish.circle.velY = fish_speed;
-    fish.circle.velX = 0;
-
-    var turn2 = (Math.random() * 360);
-    var rad2 = (turn2*Math.PI)/180;
-    var cs2 = Math.cos(rad2);
-    var sn2 = Math.sin(rad2);
-
-    var px2 = fish.circle.velX * cs2 - fish.circle.velY * sn2;
-    var py2 = fish.circle.velX * sn2 + fish.circle.velY * cs2;
-
-    fish.circle.velX = px2;
-    fish.circle.velY = py2;
-    fish.tick=0;
-    fish.fitness=0;
-
-    pop[0]=fish;
-    container.addChild(fish.circle);
-
-    for(var i=1;i<population_size/2;i++){
-      fish = pop[population_size-1].makeChild(pop[population_size-i-1]);
-      coor = placefish();
-      fish.circle.x=coor[0];
-      fish.circle.y=coor[1];
-      fish.tick=0;
-      fish.fitness=0;
-      pop[i]=fish;
-      container.addChild(fish.circle);
-    }
-    for(var i=population_size/2;i<population_size;i++){
-      fish = pop[i];
-      coor = placefish();
-      fish.circle.x=coor[0];
-      fish.circle.y=coor[1];
-      fish.tick=0;
-      fish.fitness=0;
-      container.addChild(fish.circle);
-    }
+    createNewGeneration();
   }
 }
 
 function compare(a,b){
   return a.fitness - b.fitness;
 }
-
 
 /**
 * updates the location of the rocks
@@ -272,9 +211,7 @@ function  moveRocks() {
     rock.x += rock.velX;
     if(rock.x<0 || rock.x>w){
       rock.velX = -rock.velX;
-
     }
-
   }
 }
 
@@ -337,4 +274,62 @@ function updateUserInterface(latestBestFitness) {
     bestFitness = latestBestFitness;
   }
   $('#best-fitness').text("Best fitness: " + bestFitness);
+}
+function createNewGeneration() {
+  counter = 0;
+  generation ++;
+  console.log("New generation: "+generation);
+  pop.sort(compare);
+  var latestBestFitness = pop[population_size-1].fitness;
+  console.log("Best Fitness: " + latestBestFitness);
+
+  container.removeAllChildren();
+
+  var fish = new Fish();
+  fish.circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, fish_radius);
+
+  var coor = placefish();
+  fish.circle.x=coor[0];
+  fish.circle.y=coor[1];
+
+  updateUserInterface(latestBestFitness, generation);
+
+  fish.circle.velY = fish_speed;
+  fish.circle.velX = 0;
+
+  var turn2 = (Math.random() * 360);
+  var rad2 = (turn2*Math.PI)/180;
+  var cs2 = Math.cos(rad2);
+  var sn2 = Math.sin(rad2);
+
+  var px2 = fish.circle.velX * cs2 - fish.circle.velY * sn2;
+  var py2 = fish.circle.velX * sn2 + fish.circle.velY * cs2;
+
+  fish.circle.velX = px2;
+  fish.circle.velY = py2;
+  fish.tick=0;
+  fish.fitness=0;
+
+  pop[0]=fish;
+  container.addChild(fish.circle);
+
+  for(var i=1;i<population_size/2;i++){
+    fish = pop[population_size-1].makeChild(pop[population_size-i-1]);
+    coor = placefish();
+    fish.circle.x=coor[0];
+    fish.circle.y=coor[1];
+    fish.tick=0;
+    fish.fitness=0;
+    pop[i]=fish;
+    container.addChild(fish.circle);
+  }
+  for(var i=population_size/2;i<population_size;i++){
+    fish = pop[i];
+    coor = placefish();
+    fish.circle.x=coor[0];
+    fish.circle.y=coor[1];
+    fish.tick=0;
+    fish.fitness=0;
+    container.addChild(fish.circle);
+  }
 }
