@@ -6,6 +6,22 @@ var Fish = function() {
   this.dead=0;
   this.hunger=100;
 }
+
+/**
+* @returns
+*   A representation of the Net object as a plain javascript object
+*   with a generation property and a neurons property. Neurons is
+*   returned as a list of lists, each of which is an edge weight.
+*/
+Fish.prototype.getRepresentation = function (generation) {
+  var plainRepresentation = {generationCount: generation};
+  plainRepresentation.neurons = this.net.getRepresentation();
+  // this.net.layers.forEach(function(neuron, index, neurons) {
+  //   console.log(neuron);
+  // });
+  return plainRepresentation;
+}
+
 /**
  * Creates a baby fish, so cute
  * Requires male and female parents have the same number of edges in their nets.

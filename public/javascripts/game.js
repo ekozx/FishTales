@@ -168,10 +168,10 @@ function actOnTick(event ) {
     var netInputs = [foodx,foody,circle.velX/fish_speed,circle.velY/fish_speed];
 
     pop[i].net.feedForward(netInputs);
+
     //feed into net for the correct fish
     //get turn output
     //vector math to turn each fish, currently random
-
     var out1 = pop[i].net.getResults()[0];
     var turn = out1*45;
     var rad = (turn*pi())/180;
@@ -265,15 +265,16 @@ function placefish() {
   var output = [Math.random() * w,Math.random() * h];
   return output;
 }
-function updateUserInterface(latestBestFitness) {
+function updateUserInterface(bestFish) {
   var displayGeneration = generation + 1;
   $("#generation").text("Generation:" + displayGeneration);
   generationTime = $('#time-slider').val();
   fish_speed = $('#speed-slider').val();
-  if(latestBestFitness > bestFitness) {
-    bestFitness = latestBestFitness;
+  if(bestFish.fitness > bestFitness) {
+    bestFitness = bestFish.fitness;
   }
-  $('#best-fitness').text("Best fitness: " + bestFitness);
+  $('#best-fitness').text("Best fitness: " + bestFish.fitness);
+  $('#save').data("net", bestFish.getRepresentation(displayGeneration));
 }
 function createNewGeneration() {
   counter = 0;
@@ -292,7 +293,7 @@ function createNewGeneration() {
   fish.circle.x=coor[0];
   fish.circle.y=coor[1];
 
-  updateUserInterface(latestBestFitness, generation);
+  updateUserInterface(pop[population_size-1], generation);
 
   fish.circle.velY = fish_speed;
   fish.circle.velX = 0;

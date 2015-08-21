@@ -33,6 +33,25 @@ function createLayers(topology) {
   }
   return layers;
 }
+
+/**
+* @returns
+*   3 layers of nested lists. The first list is a layer in the network and
+*   each list in that layer is a filled with a list of weights going
+*   from* that node.
+*/
+Net.prototype.getRepresentation = function() {
+  var netRepresentation = [];
+  this.layers.forEach(function(layer, index) {
+    var layerRepresentation = [];
+    layer.forEach(function(neuron, index) {
+      layerRepresentation.push(neuron.getRepresentation());
+    });
+    netRepresentation.push(layerRepresentation);
+  });
+  console.log(netRepresentation);
+  return netRepresentation;
+}
 /**
   * Retruns the result values from the last neurons after calling feedForward.
   * @returns

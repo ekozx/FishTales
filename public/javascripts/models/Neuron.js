@@ -16,8 +16,17 @@ var Neuron = function(numOutputs, index) {
 
   this.outputVal = 0.0;
   this.inputVal = 0.0;
-  this.gradient = 0.0;
+  // this.gradient = 0.0;
 };
+
+/**
+* @returns
+*   An array of integers, each integer is a weight on a directed edge
+*   *away* from this neuron.
+*/
+Neuron.prototype.getRepresentation = function() {
+  return this.connectionWeights;
+}
 /**
  * @param numOutputs
  *     The number of outputs

@@ -23,4 +23,11 @@ $(document).ready(function() {
   $('#killall').click(function() {
     createNewGeneration(); //from game.js
   })
+  $('#save').click(function() {
+    var net = $('#save').data("net");
+    console.log(net);
+    $.post('/store').done(function(data) {
+      console.log(data);
+    });
+  });
 });
