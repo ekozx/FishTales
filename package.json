@@ -16,6 +16,7 @@
     "mongoose": "^4.0.1",
     "morgan": "~1.0.0",
     "nodemon": "*",
+    "rsvp": "^3.0.21",
     "static-favicon": "~1.0.0"
   }
 }

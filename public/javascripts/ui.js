@@ -26,7 +26,7 @@ $(document).ready(function() {
   $('#save').click(function() {
     var net = $('#save').data("net");
     console.log(net);
-    $.post('/store').done(function(data) {
+    $.post('/store', net).done(function(data) {
       console.log(data);
     });
   });

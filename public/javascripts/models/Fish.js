@@ -15,10 +15,7 @@ var Fish = function() {
 */
 Fish.prototype.getRepresentation = function (generation) {
   var plainRepresentation = {generationCount: generation};
-  plainRepresentation.neurons = this.net.getRepresentation();
-  // this.net.layers.forEach(function(neuron, index, neurons) {
-  //   console.log(neuron);
-  // });
+  plainRepresentation.layers = this.net.getRepresentation();
   return plainRepresentation;
 }
 

@@ -38,7 +38,7 @@ function createLayers(topology) {
 * @returns
 *   3 layers of nested lists. The first list is a layer in the network and
 *   each list in that layer is a filled with a list of weights going
-*   from* that node.
+*   *from* that node.
 */
 Net.prototype.getRepresentation = function() {
   var netRepresentation = [];
@@ -49,7 +49,6 @@ Net.prototype.getRepresentation = function() {
     });
     netRepresentation.push(layerRepresentation);
   });
-  console.log(netRepresentation);
   return netRepresentation;
 }
 /**

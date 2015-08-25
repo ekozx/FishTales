@@ -49,6 +49,13 @@ if (app.get('env') === 'development') {
     });
 }
 
+var uriString =
+process.env.MONGOLAB_URI ||
+process.env.MONGOHQ_URL ||
+'mongodb://localhost/fishtales';
+
+mongoose.connect(uriString);
+
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {

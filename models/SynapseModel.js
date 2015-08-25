@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 
 var SynapseModelSchema = mongoose.Schema({
-  senderNeuronId: Number,
-  receiverNeuronId: Number,
+  senderNeuronId: String,
+  receiverIndex: Number,
   weight: Number
 });
 

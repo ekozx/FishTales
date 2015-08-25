@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 
 var NeuronModelSchema = mongoose.Schema({
-  netId: Number,
-  layerId: Number
+  netId: String,
+  layerIndex: Number
 });
 
 module.exports = mongoose.model('Neuron', NeuronModelSchema);
