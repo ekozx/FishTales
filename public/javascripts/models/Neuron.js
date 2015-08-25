@@ -7,7 +7,7 @@
  * @param connections
  *     Array of integers for the weights of the edges
  */
-var Neuron = function(numOutputs, index) {
+function Neuron(numOutputs, index) {
   this.eta = 0.39; // Overall net learning rate
   this.alpha = 0.1; //momentum, multiplied by last delta weight
   this.numOutputs = numOutputs;

@@ -7,7 +7,7 @@
  * @param topology
  *     An array of integers
  */
-var Net = function(topology) {
+function Net(topology) {
   this.numLayers = topology.length;
   this.layers = createLayers(topology);
 };

@@ -1,10 +1,12 @@
-var Fish = function() {
+function Fish() {
+  this.name = getRandomName();
   this.net = new Net([4,6,1]);
   this.circle = new createjs.Shape();
   this.tick = 0;
   this.fitness = 0;
   this.dead=0;
   this.hunger=100;
+  this.circle.addEventListener("click", showFishRepresentation.bind(this));
 }
 
 /**
@@ -89,4 +91,17 @@ Fish.prototype.makeChild = function (maleParent) {
  */
 function getMutationRate() {
   return .06;
+}
+
+/**
+* Displays the fishes net under the stats menu item
+*/
+function showFishRepresentation(clickEvent) {
+  console.log(this.net.getRepresentation());
+}
+
+/**
+*/
+function getRandomName() {
+  return "bob";
 }
