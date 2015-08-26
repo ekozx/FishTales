@@ -46,7 +46,8 @@ navbar > a {
   text-decoration: none;
 }
 .options {
-
+  width: 50%;
+  float: left;
 }
 .options-anchor {
   cursor: pointer;
@@ -65,4 +66,25 @@ navbar > a {
 .title {
   margin-left: 30px;
   display: inline;
+}
+
+/* d3 Styles */
+.link {
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+
+.node {
+  fill: #000;
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.node.a { fill: #1f77b4; }
+.node.b { fill: #ff7f0e; }
+.node.c { fill: #2ca02c; }
+
+#net {
+  float:right;
+  width: 50%;
 }

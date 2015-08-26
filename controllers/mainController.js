@@ -11,7 +11,7 @@ exports.about = function(req, res, app) {
 	res.render('about');
 }
 exports.storeNet = function(req, res, app) {
-	saveNet(req.body.generationCount)
+	saveNet(req.body)
 	.then(function(netId) {
 		return rsvp.Promise.all(saveNeurons(netId, req.body.layers));
 	})
@@ -34,10 +34,12 @@ exports.storeNet = function(req, res, app) {
 * 	A promise containing the object id of the neural network
 *		to be used in any neurons that need a reference to it.
 */
-var saveNet = function(generation) {
+var saveNet = function(body) {
 	return new rsvp.Promise(function(resolve, reject) {
 		var netEntry = new Net({
-			generationCount: generation
+			generationCount: body.generationCount,
+			fitness: body.fitness,
+			name: body.name
 		});
 		netEntry.save(function(err, record) {
 			if (err) { reject(this); }

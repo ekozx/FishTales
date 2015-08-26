@@ -15,7 +15,11 @@ function Fish() {
 *   returned as a list of lists, each of which is an edge weight.
 */
 Fish.prototype.getRepresentation = function (generation) {
-  var plainRepresentation = {generationCount: generation};
+  var plainRepresentation = {
+    generationCount: generation,
+    fitness: this.fitness,
+    name: this.name
+  };
   plainRepresentation.layers = this.net.getRepresentation();
   return plainRepresentation;
 }
@@ -124,7 +128,7 @@ function getMutationRate() {
 }
 
 /**
-* Displays the fishes net under the stats menu item
+* Displays the fishes net under the stats menu item on click.
 */
 function showFishRepresentation(clickEvent) {
   console.log(this.net.getRepresentation());
