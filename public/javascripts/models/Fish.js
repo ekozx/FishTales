@@ -1,5 +1,4 @@
 function Fish() {
-  this.name = getRandomName();
   this.net = new Net([4,6,1]);
   this.circle = new createjs.Shape();
   this.tick = 0;
@@ -19,6 +18,37 @@ Fish.prototype.getRepresentation = function (generation) {
   var plainRepresentation = {generationCount: generation};
   plainRepresentation.layers = this.net.getRepresentation();
   return plainRepresentation;
+}
+
+/**
+* Sets a fish name by calling the uinames.com API. Displays the fish name under
+* stats once it is finished.
+*/
+Fish.prototype.setName = function() {
+  var fish = this;
+  $.ajax({
+    url: "http://api.uinames.com/?amount=1",
+    jsonp: "callback",
+    dataType: "jsonp",
+    success: function(response) {
+      fish.name = response[0].name;
+      fish.surname = response[0].surname;
+      fish.displayFish();
+    }
+  });
+}
+
+/**
+* Updates the stats portion of the navbar with fish specific info
+*/
+Fish.prototype.displayFish = function() {
+  $('#selected-fish').text(this.name + " " + this.surname);
+  $('#fitness').text(this.name + " fitness: " + this.fitness);
+  $('.options-container').fadeOut();
+  $('.about-container').fadeOut();
+  setTimeout(function() { // Avoid other event
+    $('.stats-container').fadeIn();
+  }, 500);
 }
 
 /**
@@ -98,10 +128,9 @@ function getMutationRate() {
 */
 function showFishRepresentation(clickEvent) {
   console.log(this.net.getRepresentation());
-}
-
-/**
-*/
-function getRandomName() {
-  return "bob";
+  if(!this.name || !this.surname) {
+    this.setName();
+  } else {
+    this.displayFish();
+  }
 }
