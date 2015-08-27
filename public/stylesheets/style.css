@@ -46,7 +46,6 @@ navbar > a {
   text-decoration: none;
 }
 .options {
-  width: 50%;
   float: left;
 }
 .options-anchor {
@@ -86,5 +85,4 @@ navbar > a {
 
 #net {
   float:right;
-  width: 50%;
 }

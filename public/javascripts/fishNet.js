@@ -9,8 +9,8 @@ var nodes = [],
 var force = d3.layout.force()
     .nodes(nodes)
     .links(links)
-    .charge(-400)
-    .linkDistance(120)
+    .charge(-200)
+    .linkDistance(60)
     .size([width, height])
     .on("tick", tick);
 
@@ -23,27 +23,22 @@ var node = svg.selectAll(".node"),
 
 // 1. Add three nodes and three links.
 setTimeout(function() {
-  var a = {id: "a"}, b = {id: "b"}, c = {id: "c"};
-  nodes.push(a, b, c);
-  links.push({source: a, target: b}, {source: a, target: c}, {source: b, target: c});
+  // var a = {id: "a"}, b = {id: "b"}, c = {id: "c"};
+  // nodes.push(a, b, c);
+  // links.push({source: a, target: b}, {source: a, target: c}, {source: b, target: c});
+  pop.forEach(function(fish, index) {
+    if(fish.isSelected) {
+      displayFishNet(fish);
+    }
+  });
   start();
 }, 0);
 
-// 2. Remove node B and associated links.
-setTimeout(function() {
-  nodes.splice(1, 1); // remove b
-  links.shift(); // remove a-b
-  links.pop(); // remove b-c
-  start();
-}, 3000);
-
-// Add node B back.
-setTimeout(function() {
-  var a = nodes[0], b = {id: "b"}, c = nodes[1];
-  nodes.push(b);
-  links.push({source: a, target: b}, {source: b, target: c});
-  start();
-}, 6000);
+function displayFishNet(fish) {
+  fish.net.getRepresentation().forEach(function(layers, layerIndex) {
+    //TODO finish!
+  });
+}
 
 function start() {
   link = link.data(force.links(), function(d) { return d.source.id + "-" + d.target.id; });

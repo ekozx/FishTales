@@ -5,6 +5,7 @@ function Fish() {
   this.fitness = 0;
   this.dead=0;
   this.hunger=100;
+  this.isSelected = false;
   this.circle.addEventListener("click", showFishRepresentation.bind(this));
 }
 
@@ -36,7 +37,7 @@ Fish.prototype.setName = function() {
     dataType: "jsonp",
     success: function(response) {
       fish.name = response[0].name;
-      fish.surname = response[0].surname;
+      fish.surname = response[0].surname;2
       fish.displayFish();
     }
   });
@@ -128,10 +129,15 @@ function getMutationRate() {
 }
 
 /**
-* Displays the fishes net under the stats menu item on click.
+* Displays the fishes net under the stats menu item on click. Sets the
+* fishes isSelected property to true and sets every other fish's isSelected
+* property to false.
 */
 function showFishRepresentation(clickEvent) {
-  console.log(this.net.getRepresentation());
+  pop.forEach(function(fish, index) {
+    fish.isSelected = false;
+  });
+  this.isSelected = true;
   if(!this.name || !this.surname) {
     this.setName();
   } else {
