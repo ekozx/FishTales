@@ -125,7 +125,6 @@ var saveSynapses = function(neurons) {
 *		A promise containing the created record (nothing is done with it)
 */
 var saveSynapse = function(neuron, synapseCount, synapse) {
-	console.log("saving synapse");
 	return new rsvp.Promise(function(resolve, reject) {
 		var synapseEntry = new Synapse({
 			senderNeuronId: neuron.neuronId,
@@ -135,7 +134,6 @@ var saveSynapse = function(neuron, synapseCount, synapse) {
 		synapseEntry.save(function(err, record) {
 			if(err) { reject(this); }
 			else {
-				console.log(record);
 				resolve(record);
 			}
 		});

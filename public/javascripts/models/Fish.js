@@ -54,6 +54,9 @@ Fish.prototype.displayFish = function() {
   setTimeout(function() { // Avoid other event
     $('.stats-container').fadeIn();
   }, 500);
+  console.log("displayed fish");
+  console.log("Done displaying fish, starting representation");
+  d3NetDisplay(this.net.getRepresentation());
 }
 
 /**

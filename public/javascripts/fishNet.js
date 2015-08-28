@@ -21,32 +21,35 @@ var svg = d3.select("#net").append("svg")
 var node = svg.selectAll(".node"),
     link = svg.selectAll(".link");
 
-// 1. Add three nodes and three links.
-setTimeout(function() {
+function startDisplay() {
+  link = link.data(force.links(), function(d) {
+    return d.source.id + "-" + d.target.id; });
+  link.enter().insert("line", ".node").attr("class", "link");
+  link.exit().remove();
+
+  node = node.data(force.nodes(), function(d) { return d.id;});
+  node.enter().append("circle").attr("class", function(d) {
+    return "node " + d.id;
+  }).attr("r", 8);
+  node.exit().remove();
+
+  force.start();
+}
+
+function d3NetDisplay(net) {
   // var a = {id: "a"}, b = {id: "b"}, c = {id: "c"};
   // nodes.push(a, b, c);
   // links.push({source: a, target: b},
-  //{source: a, target: c}, {source: b, target: c});
-  pop.forEach(function(fish, index) {
-    if(fish.isSelected) {
-      var visualizationModel = getModel(fish.net.getRepresentation());
-      // displayNodes(fish);
-    }
-  });
-  start();
-}, 0);
-function getModel(representation) {
-  var netModel = [];
-  representation.forEach(function(layer, layerIndex) {
-    var layerModel = getLayerModel(layer);
-    netModel.push(layerModel);
-  });
+  // {source: a, target: c}, {source: b, target: c});
+  var visualizationModel = getModel(net);
+  displayNodes(visualizationModel);
+  startDisplay();
 }
 function getLayerModel(layer, layerIndex) {
   var layerModel = [];
   layer.forEach(function(neuron, neuronIndex) {
     var neuronId = layerIndex + "-" + neuronIndex;
-    var edgeMapping = getEdgeMapping(neuron.getRepresentation(), neuronId, layerIndex);
+    var edgeMapping = getEdgeMapping(neuron, neuronId, layerIndex);
     layerModel.push({
       nodeModel: {id: neuronId},
       edgeModel: edgeMapping
@@ -58,28 +61,25 @@ function getEdgeMapping(synapses, neuronId, layerIndex) {
   var edgeMapping = [];
   synapses.forEach(function(synapse, synapseIndex) {
     var nextLayerNeuronId = (layerIndex + 1) + "-" + synapseIndex;
+    console.log(nextLayerNeuronId);
     edgeMapping.push({source: neuronId, target: nextLayerNeuronId});
   });
   return edgeMapping;
 }
-function displayNodes(fish) {
-
+function displayNodes(netModel) {
+  netModel.forEach(function(layer, layerIndex) {
+    layer.forEach( function(neuron, neuronIndex) {
+    });
+  });
 }
-
-function start() {
-  link = link.data(force.links(), function(d) {
-    return d.source.id + "-" + d.target.id; });
-  link.enter().insert("line", ".node").attr("class", "link");
-  link.exit().remove();
-
-  node = node.data(force.nodes(), function(d) { return d.id;});
-  node.enter().append("circle").attr("class", function(d) {
-    return "node " + d.id; }).attr("r", 8);
-  node.exit().remove();
-
-  force.start();
+function getModel(representation) {
+  var netModel = [];
+  representation.forEach(function(layer, layerIndex) {
+    var layerModel = getLayerModel(layer);
+    netModel.push(layerModel);
+  });
+  return netModel;
 }
-
 function tick() {
   node.attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
