@@ -25,28 +25,56 @@ var node = svg.selectAll(".node"),
 setTimeout(function() {
   // var a = {id: "a"}, b = {id: "b"}, c = {id: "c"};
   // nodes.push(a, b, c);
-  // links.push({source: a, target: b}, {source: a, target: c}, {source: b, target: c});
+  // links.push({source: a, target: b},
+  //{source: a, target: c}, {source: b, target: c});
   pop.forEach(function(fish, index) {
     if(fish.isSelected) {
-      displayFishNet(fish);
+      var visualizationModel = getModel(fish.net.getRepresentation());
+      // displayNodes(fish);
     }
   });
   start();
 }, 0);
-
-function displayFishNet(fish) {
-  fish.net.getRepresentation().forEach(function(layers, layerIndex) {
-    //TODO finish!
+function getModel(representation) {
+  var netModel = [];
+  representation.forEach(function(layer, layerIndex) {
+    var layerModel = getLayerModel(layer);
+    netModel.push(layerModel);
   });
+}
+function getLayerModel(layer, layerIndex) {
+  var layerModel = [];
+  layer.forEach(function(neuron, neuronIndex) {
+    var neuronId = layerIndex + "-" + neuronIndex;
+    var edgeMapping = getEdgeMapping(neuron.getRepresentation(), neuronId, layerIndex);
+    layerModel.push({
+      nodeModel: {id: neuronId},
+      edgeModel: edgeMapping
+    });
+  });
+  return layerModel;
+}
+function getEdgeMapping(synapses, neuronId, layerIndex) {
+  var edgeMapping = [];
+  synapses.forEach(function(synapse, synapseIndex) {
+    var nextLayerNeuronId = (layerIndex + 1) + "-" + synapseIndex;
+    edgeMapping.push({source: neuronId, target: nextLayerNeuronId});
+  });
+  return edgeMapping;
+}
+function displayNodes(fish) {
+
 }
 
 function start() {
-  link = link.data(force.links(), function(d) { return d.source.id + "-" + d.target.id; });
+  link = link.data(force.links(), function(d) {
+    return d.source.id + "-" + d.target.id; });
   link.enter().insert("line", ".node").attr("class", "link");
   link.exit().remove();
 
   node = node.data(force.nodes(), function(d) { return d.id;});
-  node.enter().append("circle").attr("class", function(d) { return "node " + d.id; }).attr("r", 8);
+  node.enter().append("circle").attr("class", function(d) {
+    return "node " + d.id; }).attr("r", 8);
   node.exit().remove();
 
   force.start();
