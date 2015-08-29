@@ -56,7 +56,7 @@ Fish.prototype.displayFish = function() {
   }, 500);
   console.log("displayed fish");
   console.log("Done displaying fish, starting representation");
-  d3NetDisplay(this.net.getRepresentation());
+  d3NetDisplay(this.net.getRepresentation()); // fishNet.js function
 }
 
 /**

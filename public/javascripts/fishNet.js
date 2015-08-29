@@ -23,7 +23,8 @@ var node = svg.selectAll(".node"),
 
 function startDisplay() {
   link = link.data(force.links(), function(d) {
-    return d.source.id + "-" + d.target.id; });
+    return d.source.id + "-" + d.target.id;
+  });
   link.enter().insert("line", ".node").attr("class", "link");
   link.exit().remove();
 
@@ -37,10 +38,6 @@ function startDisplay() {
 }
 
 function d3NetDisplay(net) {
-  // var a = {id: "a"}, b = {id: "b"}, c = {id: "c"};
-  // nodes.push(a, b, c);
-  // links.push({source: a, target: b},
-  // {source: a, target: c}, {source: b, target: c});
   var visualizationModel = getModel(net);
   displayNodes(visualizationModel);
   startDisplay();
@@ -61,21 +58,28 @@ function getEdgeMapping(synapses, neuronId, layerIndex) {
   var edgeMapping = [];
   synapses.forEach(function(synapse, synapseIndex) {
     var nextLayerNeuronId = (layerIndex + 1) + "-" + synapseIndex;
-    console.log(nextLayerNeuronId);
     edgeMapping.push({source: neuronId, target: nextLayerNeuronId});
   });
   return edgeMapping;
 }
 function displayNodes(netModel) {
+  // var a = {id: "a"}, b = {id: "b"}, c = {id: "c"};
+  // nodes.push(a, b, c);
+  // links.push({source: a, target: b},
+  // {source: a, target: c}, {source: b, target: c});
   netModel.forEach(function(layer, layerIndex) {
     layer.forEach( function(neuron, neuronIndex) {
+      nodes.push(neuron.nodeModel);
+      neuron.edgeModel.forEach(function(edge, edgeIndex) {
+        links.push({source: edge.source, target: edge.target});
+      });
     });
   });
 }
 function getModel(representation) {
   var netModel = [];
   representation.forEach(function(layer, layerIndex) {
-    var layerModel = getLayerModel(layer);
+    var layerModel = getLayerModel(layer, layerIndex);
     netModel.push(layerModel);
   });
   return netModel;
