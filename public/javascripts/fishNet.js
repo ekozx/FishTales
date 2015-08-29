@@ -40,25 +40,31 @@ function startDisplay() {
 function d3NetDisplay(net) {
   var visualizationModel = getModel(net);
   displayNodes(visualizationModel);
+
   startDisplay();
 }
 function getLayerModel(layer, layerIndex) {
   var layerModel = [];
   layer.forEach(function(neuron, neuronIndex) {
     var neuronId = layerIndex + "-" + neuronIndex;
-    var edgeMapping = getEdgeMapping(neuron, neuronId, layerIndex);
-    layerModel.push({
-      nodeModel: {id: neuronId},
-      edgeModel: edgeMapping
-    });
+    var nodeModel = {id: neuronId};
+    layerModel.push({node: nodeModel, synapses: neuron});
   });
+  // layer.forEach(function(neuron, neuronIndex) {
+  //   var neuronId = layerIndex + "-" + neuronIndex;
+  //   var model = {id: neuronId};
+  //   var edgeMapping = getEdgeMapping(neuron, model, layerIndex);
+  //   layerModel.push({
+  //     nodeModel: model,
+  //     edgeModel: edgeMapping
+  //   });
+  // });
   return layerModel;
 }
-function getEdgeMapping(synapses, neuronId, layerIndex) {
+function getEdgeMapping(synapses, neuronModel, nextLayer) {
   var edgeMapping = [];
   synapses.forEach(function(synapse, synapseIndex) {
-    var nextLayerNeuronId = (layerIndex + 1) + "-" + synapseIndex;
-    edgeMapping.push({source: neuronId, target: nextLayerNeuronId});
+    edgeMapping.push({source: neuronModel, target: nextLayer[synapseIndex].node});
   });
   return edgeMapping;
 }
@@ -69,20 +75,32 @@ function displayNodes(netModel) {
   // {source: a, target: c}, {source: b, target: c});
   netModel.forEach(function(layer, layerIndex) {
     layer.forEach( function(neuron, neuronIndex) {
-      nodes.push(neuron.nodeModel);
-      neuron.edgeModel.forEach(function(edge, edgeIndex) {
-        links.push({source: edge.source, target: edge.target});
+      console.log(neuron);
+      nodes.push(neuron.node);
+      neuron.outgoingEdges.forEach(function(edge, edgeIndex) {
+        links.push(edge);
       });
     });
   });
 }
 function getModel(representation) {
-  var netModel = [];
+  var intermediateNetModel = [];
   representation.forEach(function(layer, layerIndex) {
     var layerModel = getLayerModel(layer, layerIndex);
-    netModel.push(layerModel);
+    intermediateNetModel.push(layerModel);
   });
-  return netModel;
+  // We are not interested in the final layer
+  for(var i = 0; i < intermediateNetModel.length; i++) {
+    intermediateNetModel[i].forEach(function(neuronModel, neuronIndex) {
+      neuronModel.outgoingEdges = getEdgeMapping(
+        neuronModel.synapses,
+        neuronModel.node,
+        intermediateNetModel[i + 1]
+      );
+    });
+  }
+  console.log(intermediateNetModel);
+  return intermediateNetModel;
 }
 function tick() {
   node.attr("cx", function(d) { return d.x; })
