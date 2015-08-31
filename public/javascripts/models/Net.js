@@ -10,6 +10,7 @@
 function Net(topology) {
   this.numLayers = topology.length;
   this.layers = createLayers(topology);
+  this.layers[this.numLayers - 1].pop();
 };
 /**
  * Generate each layer for the neural network, populating with regular neurons
@@ -49,6 +50,8 @@ Net.prototype.getRepresentation = function() {
     });
     netRepresentation.push(layerRepresentation);
   });
+  console.log(this.layers)
+  console.log(netRepresentation);
   return netRepresentation;
 }
 /**
