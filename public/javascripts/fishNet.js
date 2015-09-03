@@ -1,18 +1,17 @@
 function d3NetDisplay(net) {
   // get the data
   var links = [];
-
+  $('svg').remove();
   var visualizationModel = getModel(net);
   visualizationModel.forEach(function(layer, layerIndex) {
     layer.forEach(function(neuron, neuronIndex) {
       neuron.outgoingEdges.forEach(function(edge, edgeIndex) {
-        console.log(edge);
         links.push({source: edge.source.id, target: edge.target.id});
       });
     });
   });
 
-  console.log(links);
+  console.log(links.length);
   displayNet(links);
 }
 function getModel(representation) {
