@@ -50,8 +50,6 @@ Net.prototype.getRepresentation = function() {
     });
     netRepresentation.push(layerRepresentation);
   });
-  console.log(this.layers)
-  console.log(netRepresentation);
   return netRepresentation;
 }
 /**

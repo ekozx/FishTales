@@ -68,20 +68,23 @@ navbar > a {
 }
 
 /* d3 Styles */
-.link {
-  stroke: #000;
+path.link {
+  fill: none;
+  stroke: #666;
   stroke-width: 1.5px;
 }
 
-.node {
-  fill: #000;
+circle {
+  fill: #ccc;
   stroke: #fff;
   stroke-width: 1.5px;
 }
 
-.node.a { fill: #1f77b4; }
-.node.b { fill: #ff7f0e; }
-.node.c { fill: #2ca02c; }
+text {
+  fill: #000;
+  font: 10px sans-serif;
+  pointer-events: none;
+}
 
 #net {
   float:right;

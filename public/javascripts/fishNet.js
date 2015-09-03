@@ -1,101 +1,19 @@
-var width = 400,
-    height = 200;
-
-var color = d3.scale.category10();
-
-var nodes = [],
-    links = [];
-
-var force = d3.layout.force()
-    .nodes(nodes)
-    .links(links)
-    .charge(-300)
-    .linkDistance(100)
-    .size([width, height])
-    .on("tick", tick)
-    .gravity(.5);
-
-var svg = d3.select("#net").append("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-var marker = svg.append("defs").append("marker")
-        .attr("id", "arrow")
-        .attr("viewBox", "0 -5 10 10")
-        .attr("refX", 15)
-        .attr("refY", -1.5)
-        .attr("markerWidth", 6)
-        .attr("markerHeight", 6)
-        .attr("orient", "auto")
-     .append("path")
-        .attr("d", "M0,-5L10,0L0,5");
-
-var node = svg.selectAll(".node"),
-    link = svg.selectAll(".link");
-
-function startDisplay() {
-  link = link.data(force.links(), function(d) {
-    return d.source.id + "-" + d.target.id;
-  });
-  link.enter().append("path")
-    .attr("class", "link")
-    .style("stroke", function (d) {
-        return d3.rgb(5*d.value, 200+d.value, 127-2*d.value);
-     })
-    .attr("marker-end", "url(#arrow)");
-  link.enter().insert("line", ".node").attr("class", "link");
-  link.exit().remove();
-
-  node = node.data(force.nodes(), function(d) { return d.id;});
-  node.enter()
-  .append("circle")
-  .attr("class", function(d) {
-    return "node " + d.id;
-  })
-  .attr("r", 8);
-
-
-  node.exit().remove();
-
-  force.start();
-}
-
 function d3NetDisplay(net) {
-  var visualizationModel = getModel(net);
-  displayNodes(visualizationModel);
+  // get the data
+  var links = [];
 
-  startDisplay();
-}
-function getLayerModel(layer, layerIndex) {
-  var layerModel = [];
-  layer.forEach(function(neuron, neuronIndex) {
-    var neuronId = layerIndex + "-" + neuronIndex;
-    var nodeModel = {id: neuronId};
-    layerModel.push({node: nodeModel, synapses: neuron});
-  });
-  return layerModel;
-}
-function getEdgeMapping(synapses, neuronModel, nextLayer) {
-  var edgeMapping = [];
-  synapses.forEach(function(synapse, synapseIndex) {
-    edgeMapping.push({source: neuronModel, target: nextLayer[synapseIndex].node});
-  });
-  return edgeMapping;
-}
-function displayNodes(netModel) {
-  // var a = {id: "a"}, b = {id: "b"}, c = {id: "c"};
-  // nodes.push(a, b, c);
-  // links.push({source: a, target: b},
-  // {source: a, target: c}, {source: b, target: c});
-  console.log(netModel);
-  netModel.forEach(function(layer, layerIndex) {
-    layer.forEach( function(neuron, neuronIndex) {
-      nodes.push(neuron.node);
+  var visualizationModel = getModel(net);
+  visualizationModel.forEach(function(layer, layerIndex) {
+    layer.forEach(function(neuron, neuronIndex) {
       neuron.outgoingEdges.forEach(function(edge, edgeIndex) {
-        links.push(edge);
+        console.log(edge);
+        links.push({source: edge.source.id, target: edge.target.id});
       });
     });
   });
+
+  console.log(links);
+  displayNet(links);
 }
 function getModel(representation) {
   var intermediateNetModel = [];
@@ -115,12 +33,105 @@ function getModel(representation) {
   }
   return intermediateNetModel;
 }
-function tick() {
-  node.attr("cx", function(d) { return d.x; })
-      .attr("cy", function(d) { return d.y; })
+function getLayerModel(layer, layerIndex) {
+  var layerModel = [];
+  layer.forEach(function(neuron, neuronIndex) {
+    var neuronId = layerIndex + "-" + neuronIndex;
+    var nodeModel = {id: neuronId};
+    layerModel.push({node: nodeModel, synapses: neuron});
+  });
+  return layerModel;
+}
+function getEdgeMapping(synapses, neuronModel, nextLayer) {
+  var edgeMapping = [];
+  synapses.forEach(function(synapse, synapseIndex) {
+    edgeMapping.push({source: neuronModel, target: nextLayer[synapseIndex].node, value: 5});
+  });
+  return edgeMapping;
+}
+function displayNet(links) {
+  var nodes = {};
 
-  link.attr("x1", function(d) { return d.source.x; })
-      .attr("y1", function(d) { return d.source.y; })
-      .attr("x2", function(d) { return d.target.x; })
-      .attr("y2", function(d) { return d.target.y; });
+  // Compute the distinct nodes from the links.
+  links.forEach(function(link) {
+    link.source = nodes[link.source] ||
+        (nodes[link.source] = {name: link.source});
+    link.target = nodes[link.target] ||
+        (nodes[link.target] = {name: link.target});
+    link.value = +link.value;
+  });
+
+  var width = 600,
+      height = 300;
+
+  var force = d3.layout.force()
+      .nodes(d3.values(nodes))
+      .links(links)
+      .size([width, height])
+      .linkDistance(60)
+      .charge(-300)
+      .on("tick", tick)
+      .start();
+
+  var svg = d3.select("#net").append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+  // build the arrow.
+  svg.append("svg:defs").selectAll("marker")
+      .data(["end"])      // Different link/path types can be defined here
+    .enter().append("svg:marker")    // This section adds in the arrows
+      .attr("id", String)
+      .attr("viewBox", "0 -5 10 10")
+      .attr("refX", 15)
+      .attr("refY", -1.5)
+      .attr("markerWidth", 6)
+      .attr("markerHeight", 6)
+      .attr("orient", "auto")
+    .append("svg:path")
+      .attr("d", "M0,-5L10,0L0,5");
+
+  // add the links and the arrows
+  var path = svg.append("svg:g").selectAll("path")
+      .data(force.links())
+    .enter().append("svg:path")
+  //    .attr("class", function(d) { return "link " + d.type; })
+      .attr("class", "link")
+      .attr("marker-end", "url(#end)");
+
+  // define the nodes
+  var node = svg.selectAll(".node")
+      .data(force.nodes())
+    .enter().append("g")
+      .attr("class", "node")
+      .call(force.drag);
+
+  // add the nodes
+  node.append("circle")
+      .attr("r", 5);
+
+  // add the text
+  node.append("text")
+      .attr("x", 12)
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name; });
+
+  // add the curvy lines
+  function tick() {
+      path.attr("d", function(d) {
+          var dx = d.target.x - d.source.x,
+              dy = d.target.y - d.source.y,
+              dr = Math.sqrt(dx * dx + dy * dy);
+          return "M" +
+              d.source.x + "," +
+              d.source.y + "A" +
+              dr + "," + dr + " 0 0,1 " +
+              d.target.x + "," +
+              d.target.y;
+      });
+
+      node
+          .attr("transform", function(d) {
+          return "translate(" + d.x + "," + d.y + ")"; });
+  }
 }
