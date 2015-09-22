@@ -11,25 +11,26 @@ exports.about = function(req, res, app) {
 	res.render('about');
 }
 exports.storeNet = function(req, res, app) {
-	saveNet(req.body)
-	.then(function(netId) {
+	saveNet(req.body) // Store the Net Entry
+	.then(function(netId) { // Store the Neuron entries (nodes)
 		return rsvp.Promise.all(saveNeurons(netId, req.body.layers));
 	})
-	.then(function(neurons) {
+	.then(function(neurons) { // Store the Synapse entries (edges)
 		return rsvp.Promise.all(saveSynapses(neurons));
 	})
-	.then(function(completedNet) {
+	.then(function(completedNet) { // Alert the front end
 		res.json({success: true});
 	})
-	.catch(function(error) {
+	.catch(function(error) { // Catch errors
 		console.log(error);
 	});
 }
 
 /**
 * Saves a neural net into mongodb within a promise.
-* @param generation
-*		The generation of the neural network that was saved.
+* @param body
+*		An object from the front end containing the fitness of a fish, its name,
+*		and generation.
 * @returns
 * 	A promise containing the object id of the neural network
 *		to be used in any neurons that need a reference to it.

@@ -69,7 +69,7 @@ Net.prototype.getResults = function() {
   * then uses those initial values to populate outputvals the rest of
   * the neurons in the network.
   * @param inputVals
-  *   An array of floats, x, s.t. 0 <= x < 1
+  *   An array of floats, x, such that 0 <= x < 1
   */
 Net.prototype.feedForward = function(inputVals) {
   if(inputVals.length !== this.layers[0].length-1) {

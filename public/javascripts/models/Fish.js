@@ -38,7 +38,7 @@ Fish.prototype.setName = function() {
     dataType: "jsonp",
     success: function(response) {
       fish.name = response[0].name;
-      fish.surname = response[0].surname;2
+      fish.surname = response[0].surname;
       fish.displayFish();
     }
   });

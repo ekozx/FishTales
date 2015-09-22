@@ -1,5 +1,11 @@
+/**
+* Called on click for a fish. Removes the existing fish and creates links for
+* the edges in the network
+* @param net
+*   The neural net representation. An array (layers), of arrays (neurons),
+*   of arrays (edges directed towards that neuron)
+*/
 function d3NetDisplay(net) {
-  // get the data
   var links = [];
   $('svg').remove();
   var visualizationModel = getModel(net);
@@ -94,7 +100,6 @@ function displayNet(links) {
   var path = svg.append("svg:g").selectAll("path")
       .data(force.links())
     .enter().append("svg:path")
-  //    .attr("class", function(d) { return "link " + d.type; })
       .attr("class", "link")
       .attr("marker-end", "url(#end)");
 
@@ -129,8 +134,8 @@ function displayNet(links) {
               d.target.y;
       });
 
-      node
-          .attr("transform", function(d) {
-          return "translate(" + d.x + "," + d.y + ")"; });
+      node.attr("transform", function(d) {
+          return "translate(" + d.x + "," + d.y + ")";
+        });
   }
 }

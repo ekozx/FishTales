@@ -164,14 +164,11 @@ function actOnTick(event ) {
       }
 
     }
-
+    // Feed in the data
     var netInputs = [foodx,foody,circle.velX/fish_speed,circle.velY/fish_speed];
-
     pop[i].net.feedForward(netInputs);
-
-    //feed into net for the correct fish
-    //get turn output
-    //vector math to turn each fish, currently random
+    //Get turn-output and use vector math to turn each fish
+    // pop[i] is an object of type Fish who has its own neural network
     var out1 = pop[i].net.getResults()[0];
     var turn = out1*45;
     var rad = (turn*pi())/180;
